@@ -116,7 +116,6 @@
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(300, 345);
             this.tabControl1.TabIndex = 8;
-            this.tabControl1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.tabControl1_MouseUp);
             // 
             // tabPage1
             // 
@@ -204,7 +203,6 @@
             this.taskTextBox.Size = new System.Drawing.Size(296, 319);
             this.taskTextBox.TabIndex = 0;
             this.taskTextBox.Text = "";
-            this.taskTextBox.TextChanged += new System.EventHandler(this.taskTextBox_TextChanged);
             // 
             // result
             // 
@@ -319,7 +317,6 @@
             this.Controls.Add(this.menuStrip1);
             this.Name = "Form1";
             this.Text = "ВКР Хорошев Е.И.";
-            this.Load += new System.EventHandler(this.Form1_Load);
             this.KeyDown += new System.Windows.Forms.KeyEventHandler(this.Form1_KeyDown);
             this.tabControl1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);

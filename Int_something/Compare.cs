@@ -29,9 +29,9 @@ namespace Int_something
         struct Task
         {
             public int triadCount;
-            public TranslationTable.translationTable basicEcho;
-            public TranslationTable.translationTable basicInput;
-            public TranslationTable.translationTable basicID;
+            public LL1LexilacAnalyzer.TranslatedToken basicEcho;
+            public LL1LexilacAnalyzer.TranslatedToken basicInput;
+            public LL1LexilacAnalyzer.TranslatedToken basicID;
             public Triad.Triada basicLoop;
         }
         public Queue<Problem> problemsToOut = new Queue<Problem>();
@@ -68,7 +68,7 @@ namespace Int_something
             }
             else
             {
-                input.takeOp(input.T_AC[index].operator_1);
+                input.takeOp(input.ThreeAddressCode[index].FirstOperand);
                 if (input.currentInt.value == Convert.ToInt32(currentTask.basicEcho.Value))
                 {
                     result += "Выведен верный ответ.\n";
@@ -80,18 +80,18 @@ namespace Int_something
                     score += 10;
                 }
             }
-            if (input.T_AC.Count() + 1 >= currentTask.triadCount && input.T_AC.Count() - 1 <= currentTask.triadCount)
+            if (input.ThreeAddressCode.Count() + 1 >= currentTask.triadCount && input.ThreeAddressCode.Count() - 1 <= currentTask.triadCount)
             {
                 score += 20;
             }
             else
-            if (input.T_AC.Count() + 2 > currentTask.triadCount)
+            if (input.ThreeAddressCode.Count() + 2 > currentTask.triadCount)
             {
                 score += 10;
                 result += "Необходимо четко выполнять действия в соответствии с алгоритмом, представленным на рисунке.\n";
             }
             else
-            if (input.T_AC.Count() - 1 < currentTask.triadCount)
+            if (input.ThreeAddressCode.Count() - 1 < currentTask.triadCount)
             {
                 result += "Данную программу можно выполнить за меньшее количество действий. Внимательней читайте задание.\n";
                 score += 5;
@@ -109,7 +109,7 @@ namespace Int_something
             }
             else
             {
-                input.takeOp(input.T_AC[index].operator_1);
+                input.takeOp(input.ThreeAddressCode[index].FirstOperand);
                 if (input.currentInt.name == currentTask.basicInput.AttributeValue)
                 {
                     score += 10;
@@ -206,15 +206,15 @@ namespace Int_something
         }
         int findInput()
         {
-            for (int i = 0; i < input.T_AC.Count(); ++i)
-                if (input.T_AC[i].operation.Token == 'i')
+            for (int i = 0; i < input.ThreeAddressCode.Count(); ++i)
+                if (input.ThreeAddressCode[i].Operation.Token == 'i')
                     return i;
             return -1;
         }
         int findEcho()
         {
-            for (int i = input.T_AC.Count() - 1; i > 0; --i)
-                if (input.T_AC[i].operation.Token == 'e')
+            for (int i = input.ThreeAddressCode.Count() - 1; i > 0; --i)
+                if (input.ThreeAddressCode[i].Operation.Token == 'e')
                     return i;
             return -1;
         }

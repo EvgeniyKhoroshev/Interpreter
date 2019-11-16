@@ -10,3 +10,14 @@ C:\Users\sonik\onedrive\документы\visual studio 2015\Projects\Int_somet
 C:\Users\sonik\onedrive\документы\visual studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.BS.resources
 C:\Users\sonik\onedrive\документы\visual studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.Info.resources
 C:\Users\sonik\onedrive\документы\visual studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.csprojResolveAssemblyReference.cache
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\bin\Debug\Int_something.exe.config
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\bin\Debug\Int_something.exe
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\bin\Debug\Int_something.pdb
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.BS.resources
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.Form1.resources
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.Info.resources
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.IOform.resources
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.Properties.Resources.resources
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.csproj.GenerateResource.cache
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.exe
+C:\Users\S\OneDrive\Документы\Visual Studio 2015\Projects\Int_something\Int_something\obj\Debug\Int_something.pdb

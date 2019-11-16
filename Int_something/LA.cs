@@ -1,15 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Collections;
 
 namespace Int_something
 {
-    class LA
+    public class LA
     {
 
-        private int[,] TransferTable =
+        public static int[,] TransferTable =
 //         0   1   2   3   4   5   6   7   8   9   10  11  12  13  14  15  16  17  18  19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36  37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54  55  56  57  58  59  60  61  62  63  64  65  66  67  68  
 {
 {   1,  40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 40, 110,    111,    0,  113,    40, 115,    116,    117,    118,    119,    120,    121,    122,    123,    124,    0,  118,    118,    40  },
@@ -50,16 +48,21 @@ namespace Int_something
 {   39, 114,    114,    114,    101,    114,    114,    114,    102,    114,    114,    114,    103,    114,    114,    114,    114,    104,    114,    114,    114,    114,    105,    114,    114,    114,    114,    106,    107,    114,    114,    114,    108,    114,    114,    109,    110,    111,    112,    113, 114,    115,    116,    117,    118,    119,    120,    121,    122,    123,    124,    125,    118,    118,    126 },
     };
         // Вектор терминальных символов
-        private char[] Rows = { 'B',    'O',    'L',    'I',    'R',    'E',
+        private char[] Rows =
+            { 
+                                'B',    'O',    'L',    'I',    'R',    'E',
                                 'A',    'K',    'T',    'U',    'F',    'S',
                                 'C',    'H',    'S',    'W',    'N',    'P',
                                 '0',    '0',    '+',    '-',    '*',    '=',
                                 '<',    '>',    '(',    ')',    ';',    ',',
-                                '/',    '%',    ' ',    '{',    '}' ,   '$'};
-        string[] Code;
+                                '/',    '%',    ' ',    '{',    '}' ,   '$'
+            
+            };
+
+        private readonly string[] _code;
         public LA(string[] input)
         {
-            Code = input;
+            _code = input;
         }
         private int State; //Переменная состояния
         private int ErrorCounter;
@@ -89,19 +92,19 @@ namespace Int_something
             }
             return -1;
         }
-        public TranslationTable doAnalyze() //Лексический анализ
+        public LL1LexilacAnalyzer TranslateCode() //Лексический анализ
         {
             stateLogLA = "Лог состояний: \n";
-            TranslationTable OutputTable = new TranslationTable(); //Выходная таблица трансляции;
+            LL1LexilacAnalyzer OutputTable = new LL1LexilacAnalyzer(); //Выходная таблица трансляции;
             id_Table identifiers = new id_Table();
             State = 0;
             int j = 0;
             string buf = "", lexBuf = "",atrBuf = ""; // Буфер текущей строки/лексемы
             int RowCounter = 0, Switcher;
             stateLogLA = "";
-            for (int i = 0; i < Code.Count(); ++i) // Перебор входных строк
+            for (int i = 0; i < _code.Count(); ++i) // Перебор входных строк
             {
-                buf = Code[i] + ' ';
+                buf = _code[i] + ' ';
                 j = 0;
                 while (buf.Length > j) // Перебор символов текущей строки
                 {
@@ -447,18 +450,6 @@ namespace Int_something
                 }
             }
             return OutputTable;
-        }
-
-        internal TranslationTable TranslationTable
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-            }
         }
     }
 }

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Collections;
 using System.Diagnostics;
-
+using System.Linq;
 
 namespace Int_something
 {
@@ -63,17 +63,17 @@ namespace Int_something
             "<e>", "<f>", "<F>", "<g>", "<h>", "<PV>", "<o>", "<Cmp>", "X", "B", "d", "R", "I", "W",
             "i", "e", "C", "E", "c", ";", ",", "{", "}", "(", ")", "=", "+", "-", "*", "/",	"%","$" };
         public string Log;
-        Queue<TranslationTable.translationTable> input;
-        TranslationTable.translationTable buffer;
+        Queue<LL1LexilacAnalyzer.TranslatedToken> input;
+        LL1LexilacAnalyzer.TranslatedToken buffer;
         public Queue<string> errLog;
-        Queue<TranslationTable.translationTable> Tokens;
-        public SA_LL1(Queue<TranslationTable.translationTable> input)
+        Queue<LL1LexilacAnalyzer.TranslatedToken> Tokens;
+        public SA_LL1(Queue<LL1LexilacAnalyzer.TranslatedToken> input)
         {
             errLog = new Queue<string>();
             Tokens = input;
         }
 
-        internal toPostfix toPostfix
+        internal PostfixNotation toPostfix
         {
             get
             {
@@ -132,12 +132,12 @@ namespace Int_something
         }
         int GetColByID(char Col)
         {
-            if (LLColumn.Contains(Col))
-            {
-                for (int i = 0; i < LLRow.Length; ++i)
-                    if (Col == LLColumn[i])
-                        return i;
-            }
+            if (!LLColumn.Contains(Col))
+                return -1;
+
+            for (int i = 0; i < LLRow.Length; ++i)
+                if (Col == LLColumn[i]) return i;
+
             return -1;
         }
         void PutInStack(int caseOf)

@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Int_something
 {
-    class id_Table
+    public class id_Table
     {
 
         public Dictionary<string, ID_int> intTable = new Dictionary<string, ID_int>();
@@ -34,7 +34,7 @@ namespace Int_something
             bool_buff.numberInProgram = 0;
             bool_buff.value = false;
         }
-        public bool addRecord(TranslationTable.translationTable input) // Возвращает "true", если идентификатор/константа успешно занесен(-на) в таблицу.
+        public bool addRecord(LL1LexilacAnalyzer.TranslatedToken input) // Возвращает "true", если идентификатор/константа успешно занесен(-на) в таблицу.
         {
 
             string nameForBuf;
@@ -70,7 +70,7 @@ namespace Int_something
             }
             return false;
         }
-        public bool isIdentifierExists(TranslationTable.translationTable input)
+        public bool isIdentifierExists(LL1LexilacAnalyzer.TranslatedToken input)
         {
             string nameForBuf = input.Value;
             if (!intTable.ContainsKey(nameForBuf) && !boolTable.ContainsKey(nameForBuf))

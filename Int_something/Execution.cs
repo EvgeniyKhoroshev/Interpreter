@@ -40,10 +40,10 @@ namespace Int_something
         public void exec()
         {
 
-            triadResult = new string[T_AC.Count()];
-            while (pointer < this.T_AC.Count() && !outFlag) 
+            triadResult = new string[ThreeAddressCode.Count()];
+            while (pointer < this.ThreeAddressCode.Count() && !outFlag) 
             {
-                if (T_AC[pointer].operation.AttributeValue == "OPERATION" || T_AC[pointer].operation.AttributeValue == "COMPARSION")
+                if (ThreeAddressCode[pointer].Operation.AttributeValue == "OPERATION" || ThreeAddressCode[pointer].Operation.AttributeValue == "COMPARSION")
                     operationAction();
                 actionCase();
             }
@@ -52,24 +52,24 @@ namespace Int_something
         }
         private void actionCase()
         {
-            switch (this.T_AC[pointer].operation.Token)
+            switch (this.ThreeAddressCode[pointer].Operation.Token)
             {
                 case '=':
                     assignAction();
                     ++pointer;
                     break;
                 case 'e':
-                    if (takeOp(T_AC[pointer].operator_1))
+                    if (takeOp(ThreeAddressCode[pointer].FirstOperand))
                         MessageBox.Show(currentInt.value.ToString(), "Сообщение             ");
                     else 
                         MessageBox.Show(currentBool.value.ToString(), "Сообщение            ");
                     ++pointer;
                     break;
                 case 'i':
-                    if (T_AC[pointer].operator_1.Token != 'X')
+                    if (ThreeAddressCode[pointer].FirstOperand.Token != 'X')
                     {
                         outFlag = true;
-                        error = "Строка [" + (T_AC[pointer].operation.StringNumber + 1).ToString() + "]. Оператор ввода должен содержать целочисленную переменную 'input X;' .";
+                        error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Оператор ввода должен содержать целочисленную переменную 'input X;' .";
                         return;
                     }
                     Ibuf.ShowDialog();
@@ -79,28 +79,28 @@ namespace Int_something
                     }
                     catch(Exception e)
                     {
-                        error = "Строка [" + (T_AC[pointer].operation.StringNumber + 1).ToString() + "]. Неверные данные .\n" + e.Message;
+                        error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Неверные данные .\n" + e.Message;
                         outFlag = true;
                         return;
                     }
-                    currentInt.name = T_AC[pointer].operator_1.Value;
-                    currentInt.numberInProgram = T_AC[pointer].operator_1.numberInProgram;
+                    currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
+                    currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                     currentInt.value = Convert.ToInt32(Ibuf.textBox1.Text);
                     source.Identifiers.intTable[currentInt.name] = currentInt;
                     pointer++;
                     break;
                 case '>':
-                    if (T_AC[pointer].operation.isConditionalBranch)
+                    if (ThreeAddressCode[pointer].Operation.isConditionalBranch)
                         if (triadResult[pointer - 1] == "FALSE")
-                            if (findLabel(T_AC[pointer].operation.StringNumber) != -1)
+                            if (findLabel(ThreeAddressCode[pointer].Operation.StringNumber) != -1)
                             {
-                                triadResult[pointer] = T_AC[pointer].operation.Value;
-                                pointer = findLabel(T_AC[pointer].operation.StringNumber);
+                                triadResult[pointer] = ThreeAddressCode[pointer].Operation.Value;
+                                pointer = findLabel(ThreeAddressCode[pointer].Operation.StringNumber);
                                 break;
                             }
                             else
                             {
-                                error = "Строка [" + (T_AC[pointer].operation.StringNumber + 1).ToString() + "]. Метка не найдена.";
+                                error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Метка не найдена.";
                                 outFlag = true;
                                 return;
                             }
@@ -111,15 +111,15 @@ namespace Int_something
                         }
                     else
                     {
-                        if (findLabel(T_AC[pointer].operation.numberInProgram) != -1)
+                        if (findLabel(ThreeAddressCode[pointer].Operation.numberInProgram) != -1)
                         {
-                            triadResult[pointer] = T_AC[pointer].operation.Value;
-                            pointer = findLabel(T_AC[pointer].operation.StringNumber);
+                            triadResult[pointer] = ThreeAddressCode[pointer].Operation.Value;
+                            pointer = findLabel(ThreeAddressCode[pointer].Operation.StringNumber);
                             break;
                         }
                         else
                         {
-                            error = "Строка [" + (T_AC[pointer].operation.StringNumber + 1).ToString() + "]. Метка не найдена.";
+                            error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Метка не найдена.";
                             outFlag = true;
                             return;
                         }
@@ -131,12 +131,12 @@ namespace Int_something
         }
         int findLabel(int label)
         {
-            for (int i = 0; i < T_AC.Count(); ++i)
-                if (T_AC[i].operation.Token == ':' && T_AC[i].operation.StringNumber == label)
+            for (int i = 0; i < ThreeAddressCode.Count(); ++i)
+                if (ThreeAddressCode[i].Operation.Token == ':' && ThreeAddressCode[i].Operation.StringNumber == label)
                         return i;
             return -1;
         }
-        bool checkID(translationTable input)
+        bool checkID(TranslatedToken input)
         {
             if (source.Identifiers.isIdentifierExists(input))
                 return true;
@@ -146,7 +146,7 @@ namespace Int_something
         {
             if (isInt)
                 try {
-                    switch (T_AC[pointer].operation.Token)
+                    switch (ThreeAddressCode[pointer].Operation.Token)
                     {
                         case '+':
                             triadResult[pointer] = (bufInt.value + currentInt.value).ToString();
@@ -158,7 +158,7 @@ namespace Int_something
                             triadResult[pointer] = (bufInt.value * currentInt.value).ToString();
                             break;
                         case 'c':
-                            caseOfcompares(T_AC[pointer].operation, isInt);
+                            caseOfcompares(ThreeAddressCode[pointer].Operation, isInt);
                             break;
                         case '/':
                             try
@@ -167,7 +167,7 @@ namespace Int_something
                             }
                             catch (DivideByZeroException)
                             {
-                                error = "Строка [" + (T_AC[pointer].operation.StringNumber +1).ToString() + "]. Деление на 0.";
+                                error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber +1).ToString() + "]. Деление на 0.";
                                 outFlag = true;
                                 return;
                             }
@@ -179,7 +179,7 @@ namespace Int_something
                             }
                             catch (DivideByZeroException)
                             {
-                                error = "Строка [" + (T_AC[pointer].operation.StringNumber +1).ToString() + "]. Деление на 0.";
+                                error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber +1).ToString() + "]. Деление на 0.";
                                 outFlag = true;
                                 return;
                             }
@@ -188,23 +188,23 @@ namespace Int_something
                 }
                 catch (OverflowException)
                 {
-                    error = "Строка [" + (T_AC[pointer].operation.StringNumber + 1).ToString() + "]. Переполнение разрядной сетки.";
+                    error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Переполнение разрядной сетки.";
                     outFlag = true;
                     return;
                 }
             else
             {
-                if (T_AC[pointer].operation.Token != 'c')
+                if (ThreeAddressCode[pointer].Operation.Token != 'c')
                 {
                     outFlag = true;
-                    error = "Строка [" + (T_AC[pointer].operation.StringNumber + 1).ToString() + "]. Недопустимая операция для типа данных BOOL.";
+                    error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Недопустимая операция для типа данных BOOL.";
                     return;
                 }
-                caseOfcompares(T_AC[pointer].operation, isInt);
+                caseOfcompares(ThreeAddressCode[pointer].Operation, isInt);
 
             }
         } 
-        void caseOfcompares(translationTable input, bool isInt)
+        void caseOfcompares(TranslatedToken input, bool isInt)
         {
             if (!isInt)
                 switch (input.Value)
@@ -223,7 +223,7 @@ namespace Int_something
                         break;
                     case ">":
                     case "<":
-                        error = "Строка [" + (T_AC[pointer].operation.StringNumber + 1).ToString() + "]. Недопустимая операция для типа данных BOOL.";
+                        error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Недопустимая операция для типа данных BOOL.";
                         break;
                 }
             else
@@ -259,18 +259,18 @@ namespace Int_something
         {
             clearBuff();
             bool f = false, s = false;
-            f = takeOp(T_AC[pointer].operator_1);
+            f = takeOp(ThreeAddressCode[pointer].FirstOperand);
             if (f)
                 bufInt = currentInt;
             else
                 bufBool = currentBool;
             clearCurrent();
-            s = takeOp(T_AC[pointer].operator_2);
+            s = takeOp(ThreeAddressCode[pointer].SecondOperand);
             if (s!=f)
             {
                 outFlag = true;
-                error = "Строка [" + (T_AC[pointer].operator_1.StringNumber + 1).ToString() + "]. Несовместимость типов данных : '" 
-                    + T_AC[pointer].operator_1.Value + "' и '" + T_AC[pointer].operator_2.Value + "'";
+                error = "Строка [" + (ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() + "]. Несовместимость типов данных : '" 
+                    + ThreeAddressCode[pointer].FirstOperand.Value + "' и '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
                 return;
             }
             operationCase(s);
@@ -285,7 +285,7 @@ namespace Int_something
             currentBool.numberInProgram = 0;
             currentBool.value = false;
         }
-        public bool takeOp(translationTable input)
+        public bool takeOp(TranslatedToken input)
         {
             switch (input.Token)
             {
@@ -337,7 +337,7 @@ namespace Int_something
             return false;
         }
 
-        bool getCurrentConst(translationTable input)
+        bool getCurrentConst(TranslatedToken input)
         {
             if (input.Value == "TRUE")
             {
@@ -355,13 +355,13 @@ namespace Int_something
             currentBool.numberInProgram = input.numberInProgram;
             return true;
         }
-        void getCurrentIntByID(translationTable input)
+        void getCurrentIntByID(TranslatedToken input)
         {
             currentInt.name = input.Value;
             currentInt.value = source.Identifiers.intTable[currentInt.name].value;
             currentInt.numberInProgram = input.numberInProgram;
         }
-        void getCurrentBoolByID(translationTable input)
+        void getCurrentBoolByID(TranslatedToken input)
         {
             currentBool.name = input.Value;
             currentBool.value = source.Identifiers.boolTable[currentBool.name].value;
@@ -378,110 +378,110 @@ namespace Int_something
         }
         private void assignAction()
         {
-            if (checkID(T_AC[pointer].operator_1))
+            if (checkID(ThreeAddressCode[pointer].FirstOperand))
             {
-                if (source.Identifiers.intTable.ContainsKey(T_AC[pointer].operator_1.Value))
+                if (source.Identifiers.intTable.ContainsKey(ThreeAddressCode[pointer].FirstOperand.Value))
                 {
-                    switch (T_AC[pointer].operator_2.Token)
+                    switch (ThreeAddressCode[pointer].SecondOperand.Token)
                     {
                         case 'C':
-                            if (T_AC[pointer].operator_2.Value == "TRUE" || T_AC[pointer].operator_2.Value == "FALSE")
+                            if (ThreeAddressCode[pointer].SecondOperand.Value == "TRUE" || ThreeAddressCode[pointer].SecondOperand.Value == "FALSE")
                             {
                                 outFlag = true;
-                                error = "Строка [" + Convert.ToString(T_AC[pointer].operator_1.StringNumber + 1) +
-                                    "] невозможно присвоить переменной типа 'INT' значение переменной '" + T_AC[pointer].operator_2.Value + "'";
+                                error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1) +
+                                    "] невозможно присвоить переменной типа 'INT' значение переменной '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
                                 return;
                             }
-                            currentInt.name = T_AC[pointer].operator_1.Value;
-                            currentInt.value = Convert.ToInt32(T_AC[pointer].operator_2.Value);
-                            currentInt.numberInProgram = T_AC[pointer].operator_1.numberInProgram;
+                            currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
+                            currentInt.value = Convert.ToInt32(ThreeAddressCode[pointer].SecondOperand.Value);
+                            currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                             source.Identifiers.intTable[currentInt.name] = currentInt;
                             clearBuff();
                             break;
 
                         case 'X':
-                            if (source.Identifiers.boolTable.ContainsKey(T_AC[pointer].operator_2.Value))
+                            if (source.Identifiers.boolTable.ContainsKey(ThreeAddressCode[pointer].SecondOperand.Value))
                             {
                                 outFlag = true;
-                                error = "Строка [" + Convert.ToString(T_AC[pointer].operator_1.StringNumber + 1) +
-                                        "] невозможно присвоить переменной типа 'INT' значение переменной '" + T_AC[pointer].operator_2.Value + "'";
+                                error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1) +
+                                        "] невозможно присвоить переменной типа 'INT' значение переменной '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
                                 return;
                             }
-                            currentInt.name = T_AC[pointer].operator_1.Value;
-                            currentInt.value = source.Identifiers.intTable[T_AC[pointer].operator_2.Value].value;
-                            currentInt.numberInProgram = T_AC[pointer].operator_1.numberInProgram;
+                            currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
+                            currentInt.value = source.Identifiers.intTable[ThreeAddressCode[pointer].SecondOperand.Value].value;
+                            currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                             source.Identifiers.intTable[currentInt.name] = currentInt;
                             clearBuff();
                             break;
                         case 'T':
-                            if (triadResult[T_AC[pointer].operator_2.numberInProgram] != "" &&
-                                triadResult[T_AC[pointer].operator_2.numberInProgram] != "TRUE" &&
-                                triadResult[T_AC[pointer].operator_2.numberInProgram] != "FALSE")
+                            if (triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram] != "" &&
+                                triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram] != "TRUE" &&
+                                triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram] != "FALSE")
                             {
-                                currentInt.name = T_AC[pointer].operator_1.Value;
-                                currentInt.value = Convert.ToInt32(triadResult[T_AC[pointer].operator_2.numberInProgram]);
-                                currentInt.numberInProgram = T_AC[pointer].operator_1.numberInProgram;
+                                currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
+                                currentInt.value = Convert.ToInt32(triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram]);
+                                currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                                 source.Identifiers.intTable[currentInt.name] = currentInt;
                                 clearBuff();
                             }
                             else
                             {
                                 outFlag = true;
-                                error = "Строка [" + Convert.ToString(T_AC[pointer].operator_1.StringNumber + 1).ToString() +
-                                    "] невозможно присвоить переменной типа 'INT' значение '" + T_AC[pointer].operator_2.Value + "'";
+                                error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() +
+                                    "] невозможно присвоить переменной типа 'INT' значение '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
                                 return;
                             }
                             break;
                     }
                     return;
                 }
-                if (source.Identifiers.boolTable.ContainsKey(T_AC[pointer].operator_1.Value))
+                if (source.Identifiers.boolTable.ContainsKey(ThreeAddressCode[pointer].FirstOperand.Value))
                 {
-                    switch (T_AC[pointer].operator_2.Token)
+                    switch (ThreeAddressCode[pointer].SecondOperand.Token)
                     {
                         case 'C':
-                            if (T_AC[pointer].operator_2.Value != "TRUE" && T_AC[pointer].operator_2.Value != "FALSE")
+                            if (ThreeAddressCode[pointer].SecondOperand.Value != "TRUE" && ThreeAddressCode[pointer].SecondOperand.Value != "FALSE")
                             {
                                 outFlag = true;
-                                error = "Строка [" + Convert.ToString(T_AC[pointer].operator_1.StringNumber + 1).ToString() +
-                                    "] невозможно присвоить переменной типа 'BOOL' значение '" + T_AC[pointer].operator_2.Value + "'";
+                                error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() +
+                                    "] невозможно присвоить переменной типа 'BOOL' значение '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
                                 return;
                             }
-                            currentBool.name = T_AC[pointer].operator_1.Value;
-                            currentBool.value = Convert.ToBoolean(T_AC[pointer].operator_2.Value);
-                            currentBool.numberInProgram = T_AC[pointer].operator_1.numberInProgram;
+                            currentBool.name = ThreeAddressCode[pointer].FirstOperand.Value;
+                            currentBool.value = Convert.ToBoolean(ThreeAddressCode[pointer].SecondOperand.Value);
+                            currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                             source.Identifiers.boolTable[currentBool.name] = currentBool;
                             clearBuff();
                             break;
                         case 'X':
-                            if (source.Identifiers.intTable.ContainsKey(T_AC[pointer].operator_2.Value))
+                            if (source.Identifiers.intTable.ContainsKey(ThreeAddressCode[pointer].SecondOperand.Value))
                             {
                                 outFlag = true;
-                                error = "Строка [" + Convert.ToString(T_AC[pointer].operator_1.StringNumber + 1).ToString() +
-                                        "] невозможно присвоить переменной типа 'INT' значение '" + T_AC[pointer].operator_2.Value + "'";
+                                error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() +
+                                        "] невозможно присвоить переменной типа 'INT' значение '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
                                 return;
                             }
-                            currentBool.name = T_AC[pointer].operator_1.Value;
-                            currentBool.value = source.Identifiers.boolTable[T_AC[pointer].operator_2.Value].value;
-                            currentBool.numberInProgram = T_AC[pointer].operator_1.numberInProgram;
+                            currentBool.name = ThreeAddressCode[pointer].FirstOperand.Value;
+                            currentBool.value = source.Identifiers.boolTable[ThreeAddressCode[pointer].SecondOperand.Value].value;
+                            currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                             source.Identifiers.boolTable[currentBool.name] = currentBool;
                             clearBuff();
                             break;
                         case 'T':
-                            if (triadResult[T_AC[pointer].operator_2.numberInProgram] == "TRUE" ||
-                                triadResult[T_AC[pointer].operator_2.numberInProgram] == "FALSE")
+                            if (triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram] == "TRUE" ||
+                                triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram] == "FALSE")
                             {
-                                currentBool.name = T_AC[pointer].operator_1.Value;
-                                currentBool.value = Convert.ToBoolean(triadResult[T_AC[pointer].operator_2.numberInProgram]);
-                                currentBool.numberInProgram = T_AC[pointer].operator_1.numberInProgram;
+                                currentBool.name = ThreeAddressCode[pointer].FirstOperand.Value;
+                                currentBool.value = Convert.ToBoolean(triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram]);
+                                currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                                 source.Identifiers.boolTable[currentBool.name] = currentBool;
                                 clearBuff();
                             }
                             else
                             {
                                 outFlag = true;
-                                error = "Строка [" + Convert.ToString(T_AC[pointer].operator_1.StringNumber + 1).ToString() +
-                                    "] невозможно присвоить переменной типа 'BOOL' значение '" + triadResult[T_AC[pointer].operator_2.numberInProgram] + "'";
+                                error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() +
+                                    "] невозможно присвоить переменной типа 'BOOL' значение '" + triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram] + "'";
                                 return;
                             }
                             break;
@@ -490,7 +490,7 @@ namespace Int_something
             }
             else
             {
-                error = "Идентификатор " + T_AC[pointer].operator_1.Value + " не обьявлен. Невозможно присвоить значение.";
+                error = "Идентификатор " + ThreeAddressCode[pointer].FirstOperand.Value + " не обьявлен. Невозможно присвоить значение.";
                 outFlag = true;
                 return;
             }

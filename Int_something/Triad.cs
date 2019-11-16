@@ -1,37 +1,34 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Int_something
 {
-    class Triad : toPostfix
+    class Triad : PostfixNotation
     {
         public struct Triada
         {
             public int triadNumber;
-            public translationTable operator_1;
-            public translationTable operator_2;
-            public translationTable operation;
+            public TranslatedToken FirstOperand;
+            public TranslatedToken SecondOperand;
+            public TranslatedToken Operation;
         }
         public Triada buf;
         int triadCounter = 0;
-        Stack<translationTable> workStack;
-        public Triada[] T_AC;
-        private Queue<Triada> Three_addressCode;
-        public void doTriad()
+        Stack<TranslatedToken> workStack;
+        public Triada[] ThreeAddressCode;
+        private Queue<Triada> ThreeAddressCodeQueue;
+        public void ProcessTriads()
         {
             buf = new Triada();
-            workStack = new Stack<translationTable>();
-            Three_addressCode = new Queue<Triada>();
+            workStack = new Stack<TranslatedToken>();
+            ThreeAddressCodeQueue = new Queue<Triada>();
             this.ClearBuffer();
             while (this.output.Count>0)
             {
                 this.Buffer = this.output.Dequeue();
-                actionCase();
+                ActionCase();
             }
-            T_AC = Three_addressCode.ToArray();
+            ThreeAddressCode = ThreeAddressCodeQueue.ToArray();
         }
         void createTriad()
         {
@@ -40,18 +37,18 @@ namespace Int_something
             this.Buffer.Token = 'T';
             this.Buffer.numberInProgram = triadCounter;
         }
-        private void actionCase()
+        private void ActionCase()
         {
             switch (this.Buffer.Token)
             {
                 case 'i':
                 case 'e':
-                    buf.operation = this.Buffer;
+                    buf.Operation = this.Buffer;
                     this.ClearBuffer();
-                    buf.operator_1 = workStack.Pop();
+                    buf.FirstOperand = workStack.Pop();
                     buf.triadNumber = triadCounter;
                     createTriad();
-                    Three_addressCode.Enqueue(buf);
+                    ThreeAddressCodeQueue.Enqueue(buf);
                     clearBuf();
                     ++triadCounter;
                     break;
@@ -66,12 +63,12 @@ namespace Int_something
                 case '%':
                 case '=':
                 case 'c':
-                    buf.operation = this.Buffer;
+                    buf.Operation = this.Buffer;
                     this.ClearBuffer();
-                    buf.operator_2 = workStack.Pop();
-                    buf.operator_1 = workStack.Pop();
+                    buf.SecondOperand = workStack.Pop();
+                    buf.FirstOperand = workStack.Pop();
                     buf.triadNumber = triadCounter;
-                    Three_addressCode.Enqueue(buf);
+                    ThreeAddressCodeQueue.Enqueue(buf);
                     createTriad();
                     workStack.Push(this.Buffer);
                     clearBuf();
@@ -79,24 +76,25 @@ namespace Int_something
                     break;
                 case ':':
                 case '>':
-                    buf.operation = this.Buffer;
+                    buf.Operation = this.Buffer;
                     if (this.Buffer.isConditionalBranch)
-                        buf.operator_1 = workStack.Pop();
+                        buf.FirstOperand = workStack.Pop();
                     this.ClearBuffer();
                     buf.triadNumber = triadCounter;
                     createTriad();
-                    Three_addressCode.Enqueue(buf);
+                    ThreeAddressCodeQueue.Enqueue(buf);
                     clearBuf();
                     ++triadCounter;
                     break;
             }
         }
+
         public void clearBuf()
         {
             this.ClearBuffer();
-            this.buf.operation = this.Buffer;
-            this.buf.operator_1 = this.Buffer;
-            this.buf.operator_2 = this.Buffer;
+            this.buf.Operation = this.Buffer;
+            this.buf.FirstOperand = this.Buffer;
+            this.buf.SecondOperand = this.Buffer;
         }
     }
 }

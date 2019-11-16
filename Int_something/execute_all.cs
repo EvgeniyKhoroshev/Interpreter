@@ -12,17 +12,17 @@ namespace Int_something
         public int tokens_count = 0;
         public LA lex;
         public SA_LL1 synt;
-        TranslationTable some, toS;
+        LL1LexilacAnalyzer some, toS;
         public execute_all()
         {
         }
 
         public void solve(string[] inputCode)
         {
-            this.source = new TranslationTable();
+            this.source = new LL1LexilacAnalyzer();
             lex = new LA(inputCode);
-            toS = new TranslationTable();
-            some = new TranslationTable();
+            toS = new LL1LexilacAnalyzer();
+            some = new LL1LexilacAnalyzer();
             try
             {
                 Init();
@@ -32,7 +32,7 @@ namespace Int_something
         void Init()
         {
             toOut = "";
-            some = lex.doAnalyze();
+            some = lex.TranslateCode();
             if (lex.ErrorListLA.Count > 0)
                 return;
             toSA();
@@ -42,16 +42,16 @@ namespace Int_something
             synt.Do();
             this.regroup();
             toOut += "\n";
-            foreach (translationTable t in source.TranslationList)
+            foreach (TranslatedToken t in source.TranslationList)
                 toOut += t + "\n";
             this.postfixRecord();
-            this.doTriad();
+            this.ProcessTriads();
             exec();
         }
         void toSA()
         {
             toOut = "Список токенов:\n";
-            foreach (translationTable b in some.TranslationList)
+            foreach (TranslatedToken b in some.TranslationList)
             {
                 if (b.Token != '_')
                 {

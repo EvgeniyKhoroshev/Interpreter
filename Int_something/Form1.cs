@@ -140,10 +140,10 @@ namespace Int_something
                 richTextBox2.AppendText("\n" + execution.out_log + "\n");
                 richTextBox5.AppendText("\n-------------------\n\n");
             }
-            foreach (var x in execution.T_AC)
+            foreach (var x in execution.ThreeAddressCode)
             {
                 richTextBox5.AppendText(Convert.ToString(x.triadNumber) + "   "
-                    + x.operator_1.Value + "  " + x.operation.Value + "  " + x.operator_2.Value + "\n");
+                    + x.FirstOperand.Value + "  " + x.Operation.Value + "  " + x.SecondOperand.Value + "\n");
             }
             richTextBox5.AppendText("\n-------------------\n\n");
             foreach (var x in execution.source.Identifiers.intTable)

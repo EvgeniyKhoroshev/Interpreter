@@ -6,17 +6,17 @@ using System.Threading.Tasks;
 
 namespace Int_something
 {
-    class toPostfix : TranslationTable
+    class PostfixNotation : LL1LexilacAnalyzer
     {
-        translationTable bufForIO;
+        TranslatedToken bufForIO;
         private int markCounter = 0, currentOut = -1;                           // Счетчик меток; индикатор открытого цикла
         private bool subString = false;                                         // Флаг для разбора условий
-        public TranslationTable source;                                         // Исходный класс для разбора
+        public LL1LexilacAnalyzer source;                                         // Исходный класс для разбора
         private Dictionary<char, int> hashTable = new Dictionary<char, int>();  // Таблица приоритетов операций
-        public Queue<translationTable> output;                                  // Результат преобразования в инверсную запись
+        public Queue<TranslatedToken> output;                                  // Результат преобразования в инверсную запись
         private int priority = 0;                                               // Текущий приоритет операций
         public string out_log;                                                  // Лог для ошибок
-        public TranslationTable regroupedTable = new TranslationTable();        // Класс для удаления ненужной информации из исходного класса
+        public LL1LexilacAnalyzer regroupedTable = new LL1LexilacAnalyzer();        // Класс для удаления ненужной информации из исходного класса
 /*------------------------------------------------------------------------------------------------------------------------------------------*/
         public void regroup()                                                   // Функция для удаления ненужной информации 
                                                                                 //из исходного класса
@@ -59,7 +59,7 @@ namespace Int_something
         public void postfixRecord()                                             // Функция преобразования в польскую инверсную нотацию
         {
             hashInit();
-            output = new Queue<translationTable>();                             // Инициализация переменной для результата
+            output = new Queue<TranslatedToken>();                             // Инициализация переменной для результата
             this.ClearBuffer();
             while(regroupedTable.TranslationList.Count > 0)
             {
@@ -240,7 +240,7 @@ namespace Int_something
         }
         void postfixString()                                                    // Трансляция выражений
         {
-            Stack<translationTable> workStack = new Stack<translationTable>();
+            Stack<TranslatedToken> workStack = new Stack<TranslatedToken>();
             priority = 0;
             while (true)
             {

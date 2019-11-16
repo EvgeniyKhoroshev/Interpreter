@@ -46,11 +46,12 @@
     <OutputPath>bin\x86\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <Optimize>true</Optimize>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>full</DebugType>
     <PlatformTarget>x86</PlatformTarget>
     <ErrorReport>prompt</ErrorReport>
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <Prefer32Bit>true</Prefer32Bit>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -101,6 +102,7 @@
     <Compile Include="SA_LL1.cs" />
     <Compile Include="SA_LR1.cs" />
     <Compile Include="TranslationTable.cs" />
+    <Compile Include="Translation\LexicalToken.cs" />
     <Compile Include="Triad.cs" />
     <EmbeddedResource Include="BS.resx">
       <DependentUpon>BS.cs</DependentUpon>

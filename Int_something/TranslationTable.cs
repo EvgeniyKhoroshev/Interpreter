@@ -1,15 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Collections;
+﻿using System.Collections.Generic;
 
 namespace Int_something
 {
-    class TranslationTable
+    public class LL1LexilacAnalyzer
     {
         public id_Table Identifiers = new id_Table();
-        public TranslationTable()
+        public LL1LexilacAnalyzer()
         {
             Buffer.numberInProgram = 0;
             Buffer.Token = ' ';
@@ -20,8 +16,12 @@ namespace Int_something
             Buffer.isIdentifier = false;
         }
 
-        public Queue<translationTable> TranslationList = new Queue<translationTable>();
-        public struct translationTable // Таблица трансляции
+        public Queue<TranslatedToken> TranslationList = new Queue<TranslatedToken>();
+
+        /// <summary>
+        /// Структура токена, который получился в результате разбора.
+        /// </summary>
+        public struct TranslatedToken
         {
             public int numberInProgram;
             public string Value;
@@ -33,7 +33,8 @@ namespace Int_something
             public bool isConditionalBranch;
 
         };
-        public translationTable Buffer; // Буфер ввода/вывода таблицы
+
+        public TranslatedToken Buffer; // Буфер ввода/вывода таблицы
         public void Put()
         {
             if (Buffer.isIdentifier)
