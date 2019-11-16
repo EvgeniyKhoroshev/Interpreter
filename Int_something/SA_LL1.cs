@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections;
 using System.Diagnostics;
 using System.Linq;
+using Int_something.TranslationResult;
 
 namespace Int_something
 {
@@ -63,11 +64,11 @@ namespace Int_something
             "<e>", "<f>", "<F>", "<g>", "<h>", "<PV>", "<o>", "<Cmp>", "X", "B", "d", "R", "I", "W",
             "i", "e", "C", "E", "c", ";", ",", "{", "}", "(", ")", "=", "+", "-", "*", "/",	"%","$" };
         public string Log;
-        Queue<LL1LexilacAnalyzer.TranslatedToken> input;
-        LL1LexilacAnalyzer.TranslatedToken buffer;
+        Queue<LexicalToken> input;
+        LexicalToken buffer;
         public Queue<string> errLog;
-        Queue<LL1LexilacAnalyzer.TranslatedToken> Tokens;
-        public SA_LL1(Queue<LL1LexilacAnalyzer.TranslatedToken> input)
+        Queue<LexicalToken> Tokens;
+        public SA_LL1(Queue<LexicalToken> input)
         {
             errLog = new Queue<string>();
             Tokens = input;

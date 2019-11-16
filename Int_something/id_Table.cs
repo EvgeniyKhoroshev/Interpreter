@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Int_something.TranslationResult;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -34,7 +35,7 @@ namespace Int_something
             bool_buff.numberInProgram = 0;
             bool_buff.value = false;
         }
-        public bool addRecord(LL1LexilacAnalyzer.TranslatedToken input) // Возвращает "true", если идентификатор/константа успешно занесен(-на) в таблицу.
+        public bool addRecord(LexicalToken input) // Возвращает "true", если идентификатор/константа успешно занесен(-на) в таблицу.
         {
 
             string nameForBuf;
@@ -70,7 +71,7 @@ namespace Int_something
             }
             return false;
         }
-        public bool isIdentifierExists(LL1LexilacAnalyzer.TranslatedToken input)
+        public bool isIdentifierExists(LexicalToken input)
         {
             string nameForBuf = input.Value;
             if (!intTable.ContainsKey(nameForBuf) && !boolTable.ContainsKey(nameForBuf))

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Int_something.TranslationResult;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -29,9 +30,9 @@ namespace Int_something
         struct Task
         {
             public int triadCount;
-            public LL1LexilacAnalyzer.TranslatedToken basicEcho;
-            public LL1LexilacAnalyzer.TranslatedToken basicInput;
-            public LL1LexilacAnalyzer.TranslatedToken basicID;
+            public LexicalToken basicEcho;
+            public LexicalToken basicInput;
+            public LexicalToken basicID;
             public Triad.Triada basicLoop;
         }
         public Queue<Problem> problemsToOut = new Queue<Problem>();
@@ -197,7 +198,7 @@ namespace Int_something
             currentTask.basicID = buffer.Buffer;
             currentTask.basicInput = buffer.Buffer;
             buffer.clearBuf();
-            currentTask.basicLoop =  buffer.buf;
+            currentTask.basicLoop =  buffer.BufferTriada;
 
             currentProblem.problemImage = false;
             currentProblem.problemText = "";

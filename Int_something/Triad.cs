@@ -1,60 +1,65 @@
-﻿using System;
+﻿using Int_something.TranslationResult;
+using System;
 using System.Collections.Generic;
 
 namespace Int_something
 {
     class Triad : PostfixNotation
     {
+        private int triadCounter = 0;
+
         public struct Triada
         {
-            public int triadNumber;
-            public TranslatedToken FirstOperand;
-            public TranslatedToken SecondOperand;
-            public TranslatedToken Operation;
+            public int TriadNumber;
+            public LexicalToken FirstOperand;
+            public LexicalToken SecondOperand;
+            public LexicalToken Operation;
         }
-        public Triada buf;
-        int triadCounter = 0;
-        Stack<TranslatedToken> workStack;
+
+
+
+        public Triada BufferTriada;
+        Stack<LexicalToken> workStack;
         public Triada[] ThreeAddressCode;
         private Queue<Triada> ThreeAddressCodeQueue;
         public void ProcessTriads()
         {
-            buf = new Triada();
-            workStack = new Stack<TranslatedToken>();
+            BufferTriada = new Triada();
+            workStack = new Stack<LexicalToken>();
             ThreeAddressCodeQueue = new Queue<Triada>();
-            this.ClearBuffer();
-            while (this.output.Count>0)
+            ClearBuffer();
+            while (output.Count > 0)
             {
-                this.Buffer = this.output.Dequeue();
+                Buffer = output.Dequeue();
                 ActionCase();
             }
             ThreeAddressCode = ThreeAddressCodeQueue.ToArray();
         }
         void createTriad()
         {
-            this.ClearBuffer();
-            this.Buffer.Value = "T" + Convert.ToString(triadCounter);
-            this.Buffer.Token = 'T';
-            this.Buffer.numberInProgram = triadCounter;
+            ClearBuffer();
+            Buffer.Value = "T" + Convert.ToString(triadCounter);
+            Buffer.Token = 'T';
+            Buffer.numberInProgram = triadCounter;
         }
         private void ActionCase()
         {
-            switch (this.Buffer.Token)
+            switch (Buffer.Token)
             {
                 case 'i':
                 case 'e':
-                    buf.Operation = this.Buffer;
-                    this.ClearBuffer();
-                    buf.FirstOperand = workStack.Pop();
-                    buf.triadNumber = triadCounter;
+                    BufferTriada.Operation = Buffer;
+                    ClearBuffer();
+                    BufferTriada.FirstOperand = workStack.Pop();
+                    BufferTriada.TriadNumber = triadCounter;
                     createTriad();
-                    ThreeAddressCodeQueue.Enqueue(buf);
+                    ThreeAddressCodeQueue.Enqueue(BufferTriada);
                     clearBuf();
                     ++triadCounter;
                     break;
                 case 'X':
                 case 'C':
-                    workStack.Push(this.Buffer);
+                    workStack.Push(Buffer);
                     break;
                 case '+':
                 case '-':
@@ -63,26 +68,26 @@ namespace Int_something
                 case '%':
                 case '=':
                 case 'c':
-                    buf.Operation = this.Buffer;
-                    this.ClearBuffer();
-                    buf.SecondOperand = workStack.Pop();
-                    buf.FirstOperand = workStack.Pop();
-                    buf.triadNumber = triadCounter;
-                    ThreeAddressCodeQueue.Enqueue(buf);
+                    BufferTriada.Operation = Buffer;
+                    ClearBuffer();
+                    BufferTriada.SecondOperand = workStack.Pop();
+                    BufferTriada.FirstOperand = workStack.Pop();
+                    BufferTriada.TriadNumber = triadCounter;
+                    ThreeAddressCodeQueue.Enqueue(BufferTriada);
                     createTriad();
-                    workStack.Push(this.Buffer);
+                    workStack.Push(Buffer);
                     clearBuf();
                     ++triadCounter;
                     break;
                 case ':':
                 case '>':
-                    buf.Operation = this.Buffer;
-                    if (this.Buffer.isConditionalBranch)
-                        buf.FirstOperand = workStack.Pop();
-                    this.ClearBuffer();
-                    buf.triadNumber = triadCounter;
+                    BufferTriada.Operation = Buffer;
+                    if (Buffer.isConditionalBranch)
+                        BufferTriada.FirstOperand = workStack.Pop();
+                    ClearBuffer();
+                    BufferTriada.TriadNumber = triadCounter;
                     createTriad();
-                    ThreeAddressCodeQueue.Enqueue(buf);
+                    ThreeAddressCodeQueue.Enqueue(BufferTriada);
                     clearBuf();
                     ++triadCounter;
                     break;
@@ -91,10 +96,10 @@ namespace Int_something
 
         public void clearBuf()
         {
-            this.ClearBuffer();
-            this.buf.Operation = this.Buffer;
-            this.buf.FirstOperand = this.Buffer;
-            this.buf.SecondOperand = this.Buffer;
+            ClearBuffer();
+            BufferTriada.Operation = Buffer;
+            BufferTriada.FirstOperand = Buffer;
+            BufferTriada.SecondOperand = Buffer;
         }
     }
 }

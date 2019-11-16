@@ -142,7 +142,7 @@ namespace Int_something
             }
             foreach (var x in execution.ThreeAddressCode)
             {
-                richTextBox5.AppendText(Convert.ToString(x.triadNumber) + "   "
+                richTextBox5.AppendText(Convert.ToString(x.TriadNumber) + "   "
                     + x.FirstOperand.Value + "  " + x.Operation.Value + "  " + x.SecondOperand.Value + "\n");
             }
             richTextBox5.AppendText("\n-------------------\n\n");

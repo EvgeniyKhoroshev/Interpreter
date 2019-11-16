@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Int_something.TranslationResult;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -44,7 +45,7 @@ namespace Int_something
             while (pointer < this.ThreeAddressCode.Count() && !outFlag) 
             {
                 if (ThreeAddressCode[pointer].Operation.AttributeValue == "OPERATION" || ThreeAddressCode[pointer].Operation.AttributeValue == "COMPARSION")
-                    operationAction();
+                    ProcessOperation();
                 actionCase();
             }
             dispose = Ibuf;
@@ -55,7 +56,7 @@ namespace Int_something
             switch (this.ThreeAddressCode[pointer].Operation.Token)
             {
                 case '=':
-                    assignAction();
+                    AssignAction();
                     ++pointer;
                     break;
                 case 'e':
@@ -136,7 +137,7 @@ namespace Int_something
                         return i;
             return -1;
         }
-        bool checkID(TranslatedToken input)
+        bool checkID(LexicalToken input)
         {
             if (source.Identifiers.isIdentifierExists(input))
                 return true;
@@ -158,7 +159,7 @@ namespace Int_something
                             triadResult[pointer] = (bufInt.value * currentInt.value).ToString();
                             break;
                         case 'c':
-                            caseOfcompares(ThreeAddressCode[pointer].Operation, isInt);
+                            ProcessComparsion(ThreeAddressCode[pointer].Operation, isInt);
                             break;
                         case '/':
                             try
@@ -200,46 +201,35 @@ namespace Int_something
                     error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Недопустимая операция для типа данных BOOL.";
                     return;
                 }
-                caseOfcompares(ThreeAddressCode[pointer].Operation, isInt);
+                ProcessComparsion(ThreeAddressCode[pointer].Operation, isInt);
 
             }
         } 
-        void caseOfcompares(TranslatedToken input, bool isInt)
+        void ProcessComparsion(LexicalToken input, bool isInt)
         {
             if (!isInt)
                 switch (input.Value)
                 {
                     case "==":
-                        if (currentBool.value == bufBool.value)
-                            triadResult[pointer] = "TRUE";
-                        else
-                            triadResult[pointer] = "FALSE";
+                        triadResult[pointer] = (currentBool.value == bufBool.value).ToString();
                         break;
                     case "<>":
-                        if (currentBool.value != bufBool.value)
-                            triadResult[pointer] = "TRUE";
-                        else
-                            triadResult[pointer] = "FALSE";
+                        triadResult[pointer] = (currentBool.value != bufBool.value).ToString();
                         break;
                     case ">":
                     case "<":
-                        error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Недопустимая операция для типа данных BOOL.";
+                        error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString()
+                            + "]. Недопустимая операция для типа данных BOOL.";
                         break;
                 }
             else
                 switch (input.Value)
                 {
                     case "==":
-                        if (bufInt.value == currentInt.value)
-                            triadResult[pointer] = "TRUE";
-                        else
-                            triadResult[pointer] = "FALSE";
+                        triadResult[pointer] = (bufInt.value == currentInt.value).ToString();
                         break;
                     case "<>":
-                        if (bufInt.value != currentInt.value)
-                            triadResult[pointer] = "TRUE";
-                        else
-                            triadResult[pointer] = "FALSE";
+                        triadResult[pointer] = (bufInt.value != currentInt.value).ToString();
                         break;
                     case ">":
                         if (bufInt.value > currentInt.value)
@@ -255,9 +245,9 @@ namespace Int_something
                         break;
                 }
         }
-        void operationAction()
+        void ProcessOperation()
         {
-            clearBuff();
+            ClearBuff();
             bool f = false, s = false;
             f = takeOp(ThreeAddressCode[pointer].FirstOperand);
             if (f)
@@ -285,7 +275,7 @@ namespace Int_something
             currentBool.numberInProgram = 0;
             currentBool.value = false;
         }
-        public bool takeOp(TranslatedToken input)
+        public bool takeOp(LexicalToken input)
         {
             switch (input.Token)
             {
@@ -294,13 +284,13 @@ namespace Int_something
                     {
                         if (source.Identifiers.intTable.ContainsKey(input.Value))
                         {
-                            getCurrentIntByID(input);
+                            GetCurrentIntByID(input);
                             return  true;
                         }
                         else
                             if (source.Identifiers.boolTable.ContainsKey(input.Value))
                         {
-                            getCurrentBoolByID(input);
+                            GetCurrentBoolByID(input);
                             return false;
                         }
                         else
@@ -315,16 +305,16 @@ namespace Int_something
                         return false;
                     }
                 case 'C':
-                    return getCurrentConst(input);
+                    return GetCurrentConst(input);
                 case 'T':
                     {
-                        if (triadResult[input.numberInProgram] == "TRUE")
+                        if (CompareBool(triadResult[input.numberInProgram], true))
                         {
                             currentBool.value = true;
                             currentBool.numberInProgram = input.numberInProgram;
                             return false;
                         }
-                        if (triadResult[input.numberInProgram] == "FALSE")
+                        if (CompareBool(triadResult[input.numberInProgram], false))
                         {
                             currentBool.value = false;
                             currentBool.numberInProgram = input.numberInProgram;
@@ -337,15 +327,15 @@ namespace Int_something
             return false;
         }
 
-        bool getCurrentConst(TranslatedToken input)
+        bool GetCurrentConst(LexicalToken input)
         {
-            if (input.Value == "TRUE")
+            if (CompareBool(input.Value, true))
             {
                 currentBool.value = true;
                 currentBool.numberInProgram = input.numberInProgram;
                 return false;
             }
-            if (input.Value == "FALSE")
+            if (CompareBool(input.Value, false))
             {
                 currentBool.value = false;
                 currentBool.numberInProgram = input.numberInProgram;
@@ -355,19 +345,19 @@ namespace Int_something
             currentBool.numberInProgram = input.numberInProgram;
             return true;
         }
-        void getCurrentIntByID(TranslatedToken input)
+        void GetCurrentIntByID(LexicalToken input)
         {
             currentInt.name = input.Value;
             currentInt.value = source.Identifiers.intTable[currentInt.name].value;
             currentInt.numberInProgram = input.numberInProgram;
         }
-        void getCurrentBoolByID(TranslatedToken input)
+        void GetCurrentBoolByID(LexicalToken input)
         {
             currentBool.name = input.Value;
             currentBool.value = source.Identifiers.boolTable[currentBool.name].value;
             currentBool.numberInProgram = input.numberInProgram;
         }
-        void clearBuff()
+        void ClearBuff()
         {
             bufInt.name = "";
             bufInt.numberInProgram = 0;
@@ -376,7 +366,7 @@ namespace Int_something
             bufBool.numberInProgram = 0;
             bufBool.value = false;
         }
-        private void assignAction()
+        private void AssignAction()
         {
             if (checkID(ThreeAddressCode[pointer].FirstOperand))
             {
@@ -396,7 +386,7 @@ namespace Int_something
                             currentInt.value = Convert.ToInt32(ThreeAddressCode[pointer].SecondOperand.Value);
                             currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                             source.Identifiers.intTable[currentInt.name] = currentInt;
-                            clearBuff();
+                            ClearBuff();
                             break;
 
                         case 'X':
@@ -411,7 +401,7 @@ namespace Int_something
                             currentInt.value = source.Identifiers.intTable[ThreeAddressCode[pointer].SecondOperand.Value].value;
                             currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                             source.Identifiers.intTable[currentInt.name] = currentInt;
-                            clearBuff();
+                            ClearBuff();
                             break;
                         case 'T':
                             if (triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram] != "" &&
@@ -422,7 +412,7 @@ namespace Int_something
                                 currentInt.value = Convert.ToInt32(triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram]);
                                 currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                                 source.Identifiers.intTable[currentInt.name] = currentInt;
-                                clearBuff();
+                                ClearBuff();
                             }
                             else
                             {
@@ -451,7 +441,7 @@ namespace Int_something
                             currentBool.value = Convert.ToBoolean(ThreeAddressCode[pointer].SecondOperand.Value);
                             currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                             source.Identifiers.boolTable[currentBool.name] = currentBool;
-                            clearBuff();
+                            ClearBuff();
                             break;
                         case 'X':
                             if (source.Identifiers.intTable.ContainsKey(ThreeAddressCode[pointer].SecondOperand.Value))
@@ -465,7 +455,7 @@ namespace Int_something
                             currentBool.value = source.Identifiers.boolTable[ThreeAddressCode[pointer].SecondOperand.Value].value;
                             currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                             source.Identifiers.boolTable[currentBool.name] = currentBool;
-                            clearBuff();
+                            ClearBuff();
                             break;
                         case 'T':
                             if (triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram] == "TRUE" ||
@@ -475,7 +465,7 @@ namespace Int_something
                                 currentBool.value = Convert.ToBoolean(triadResult[ThreeAddressCode[pointer].SecondOperand.numberInProgram]);
                                 currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.numberInProgram;
                                 source.Identifiers.boolTable[currentBool.name] = currentBool;
-                                clearBuff();
+                                ClearBuff();
                             }
                             else
                             {
@@ -495,5 +485,9 @@ namespace Int_something
                 return;
             }
         }
+
+        private bool CompareBool(string value, bool boolValue) =>
+            string.Equals(value, boolValue.ToString(), StringComparison.InvariantCultureIgnoreCase);
+        
     }
 }

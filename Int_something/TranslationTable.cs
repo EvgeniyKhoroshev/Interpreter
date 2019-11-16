@@ -1,40 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using Int_something.TranslationResult;
+using System.Collections.Generic;
 
 namespace Int_something
 {
     public class LL1LexilacAnalyzer
     {
         public id_Table Identifiers = new id_Table();
-        public LL1LexilacAnalyzer()
-        {
-            Buffer.numberInProgram = 0;
-            Buffer.Token = ' ';
-            Buffer.Value = "";
-            Buffer.Lexeme = 0;
-            Buffer.StringNumber = 0;
-            Buffer.AttributeValue = "";
-            Buffer.isIdentifier = false;
-        }
+        public LL1LexilacAnalyzer() => Buffer = new LexicalToken()
+        { Buffer.Token = ' '  };
 
-        public Queue<TranslatedToken> TranslationList = new Queue<TranslatedToken>();
+        public Queue<LexicalToken> TranslationList = new Queue<LexicalToken>();
 
         /// <summary>
         /// Структура токена, который получился в результате разбора.
         /// </summary>
-        public struct TranslatedToken
-        {
-            public int numberInProgram;
-            public string Value;
-            public int Lexeme;
-            public char Token;
-            public string AttributeValue;
-            public int StringNumber;
-            public bool isIdentifier;
-            public bool isConditionalBranch;
 
-        };
-
-        public TranslatedToken Buffer; // Буфер ввода/вывода таблицы
+        public LexicalToken Buffer; // Буфер ввода/вывода таблицы
         public void Put()
         {
             if (Buffer.isIdentifier)

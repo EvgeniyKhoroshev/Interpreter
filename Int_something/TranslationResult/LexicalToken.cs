@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Int_something.Translation
+﻿namespace Int_something.TranslationResult
 {
     /// <summary>
     /// Класс токена, который получился в результате разбора лексемы.

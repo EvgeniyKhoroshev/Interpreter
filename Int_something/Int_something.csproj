@@ -7,8 +7,8 @@
     <ProjectGuid>{2918320D-7C7F-49D0-9655-62C48003834F}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Int_something</RootNamespace>
-    <AssemblyName>Int_something</AssemblyName>
+    <RootNamespace>Interpreter</RootNamespace>
+    <AssemblyName>Interpreter</AssemblyName>
     <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
@@ -102,7 +102,7 @@
     <Compile Include="SA_LL1.cs" />
     <Compile Include="SA_LR1.cs" />
     <Compile Include="TranslationTable.cs" />
-    <Compile Include="Translation\LexicalToken.cs" />
+    <Compile Include="TranslationResult\LexicalToken.cs" />
     <Compile Include="Triad.cs" />
     <EmbeddedResource Include="BS.resx">
       <DependentUpon>BS.cs</DependentUpon>

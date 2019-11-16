@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Int_something.TranslationResult;
+using System;
 
 namespace Int_something
 {
@@ -42,7 +39,7 @@ namespace Int_something
             synt.Do();
             this.regroup();
             toOut += "\n";
-            foreach (TranslatedToken t in source.TranslationList)
+            foreach (LexicalToken t in source.TranslationList)
                 toOut += t + "\n";
             this.postfixRecord();
             this.ProcessTriads();
@@ -51,7 +48,7 @@ namespace Int_something
         void toSA()
         {
             toOut = "Список токенов:\n";
-            foreach (TranslatedToken b in some.TranslationList)
+            foreach (LexicalToken b in some.TranslationList)
             {
                 if (b.Token != '_')
                 {
