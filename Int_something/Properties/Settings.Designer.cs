@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Int_something.Properties
+namespace Interpreter.Properties
 {
 
 

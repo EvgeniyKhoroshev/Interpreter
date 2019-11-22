@@ -5,9 +5,9 @@ using System.Text;
 using System.Collections;
 using System.Diagnostics;
 using System.Linq;
-using Int_something.TranslationResult;
+using Interpreter.TranslationResult;
 
-namespace Int_something
+namespace Interpreter
 {
     class SA_LL1
     {
@@ -65,25 +65,13 @@ namespace Int_something
             "i", "e", "C", "E", "c", ";", ",", "{", "}", "(", ")", "=", "+", "-", "*", "/",	"%","$" };
         public string Log;
         Queue<LexicalToken> input;
-        LexicalToken buffer;
+        LexicalToken buffer = new LexicalToken();
         public Queue<string> errLog;
         Queue<LexicalToken> Tokens;
         public SA_LL1(Queue<LexicalToken> input)
         {
             errLog = new Queue<string>();
             Tokens = input;
-        }
-
-        internal PostfixNotation toPostfix
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-            }
         }
 
         public Stack Do()

@@ -1,4 +1,4 @@
-﻿using Int_something.TranslationResult;
+﻿using Interpreter.TranslationResult;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -6,12 +6,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Int_something
+namespace Interpreter
 {
     
     class Execution : Triad
     {
-        IDisposable dispose;
         IOform Ibuf;
         public string error;
         private int pointer = 0;
@@ -48,7 +47,7 @@ namespace Int_something
                     ProcessOperation();
                 actionCase();
             }
-            dispose = Ibuf;
+
             Ibuf.Dispose();
         }
         private void actionCase()

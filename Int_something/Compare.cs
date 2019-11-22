@@ -1,25 +1,26 @@
-﻿using Int_something.TranslationResult;
+﻿using Interpreter.TranslationResult;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Int_something
+namespace Interpreter
 {
     class Compare
     {
+        private Triada TriadaBuffer = new Triada();
+        private LexicalToken Buffer = new LexicalToken();
         public int currentScore, problemCount;
         double fullScore;
         public Compare()
         {
-            buffer = new execute_all();
-            initializeBasic();
+            InitializeBasic();
             problemCount = tasks.Count();
             currentTask = tasks.Dequeue();
             currentProblem = problemsToOut.Dequeue();
         }
-        execute_all  input, buffer;
+        execute_all  input;
         public struct Problem
         {
             public int problemIndex;
@@ -33,7 +34,7 @@ namespace Int_something
             public LexicalToken basicEcho;
             public LexicalToken basicInput;
             public LexicalToken basicID;
-            public Triad.Triada basicLoop;
+            public Triada basicLoop;
         }
         public Queue<Problem> problemsToOut = new Queue<Problem>();
         public Problem currentProblem;
@@ -59,7 +60,7 @@ namespace Int_something
             string result = "";
             int score = 0;
             int index = 0;
-            index = findEcho();
+            index = FindEcho();
             if (currentTask.basicEcho.AttributeValue == "")
                 score += 10;
             else
@@ -98,7 +99,7 @@ namespace Int_something
                 score += 5;
             }
 
-            index = findInput();
+            index = FindInput();
             if (currentTask.basicInput.AttributeValue == "")
             {
                 score += 10;
@@ -142,9 +143,9 @@ namespace Int_something
                 currentScore = score;
             return result;
         }
-        public void initializeBasic()
+        public void InitializeBasic()
         {
-            clearTask();
+            ClearTask();
             currentTask.basicEcho.Value = "50";
             currentTask.basicEcho.AttributeValue = "A";
             currentTask.triadCount = 2;
@@ -159,7 +160,7 @@ namespace Int_something
             currentProblem.problem_annotation = "Рисунок 1. Вывод переменной A.";
             problemsToOut.Enqueue(currentProblem);
 
-            clearTask();
+            ClearTask();
             currentTask.basicEcho.Value = "1";
             currentTask.basicEcho.AttributeValue = "B";
             currentTask.triadCount = 5;
@@ -173,7 +174,7 @@ namespace Int_something
             currentProblem.problemText = "Выполните действия, заданные алгоритмом на рисунке 2. Переменную А введите с клавиатуры. Значение введенной переменной должно быть равно 6.";
             currentProblem.problem_annotation = "Рисунок 2. Вывод переменной B.";
             problemsToOut.Enqueue(currentProblem);
-            clearTask();
+            ClearTask();
 
             currentTask.basicEcho.Value = "120";
             currentTask.basicEcho.AttributeValue = "RESULT";
@@ -188,31 +189,32 @@ namespace Int_something
             currentProblem.problemText = "Напишите программу, вычисляющую факториал числа 5 (5!). Определите, необходимые для работы алгоритма, переменные самостоятельно. Алгоритм описан на рисунке 3.\nПеременную fact введите с клавиатуры.";
             currentProblem.problem_annotation = "Рисунок 3. Вывод переменной B.";
             problemsToOut.Enqueue(currentProblem);
-            clearTask();
+            ClearTask();
 
         }
-        void clearTask()
+        void ClearTask()
         {
-            buffer.ClearBuffer();
-            currentTask.basicEcho = buffer.Buffer;
-            currentTask.basicID = buffer.Buffer;
-            currentTask.basicInput = buffer.Buffer;
-            buffer.clearBuf();
-            currentTask.basicLoop =  buffer.BufferTriada;
+            Buffer.Clear();
+            currentTask.basicEcho = Buffer;
+            currentTask.basicID = Buffer;
+            currentTask.basicInput = Buffer;
+
+            TriadaBuffer.Clear();
+            currentTask.basicLoop = TriadaBuffer;
 
             currentProblem.problemImage = false;
             currentProblem.problemText = "";
             currentProblem.problemIndex = 0;
             currentProblem.problem_annotation = "";
         }
-        int findInput()
+        int FindInput()
         {
             for (int i = 0; i < input.ThreeAddressCode.Count(); ++i)
                 if (input.ThreeAddressCode[i].Operation.Token == 'i')
                     return i;
             return -1;
         }
-        int findEcho()
+        int FindEcho()
         {
             for (int i = input.ThreeAddressCode.Count() - 1; i > 0; --i)
                 if (input.ThreeAddressCode[i].Operation.Token == 'e')
@@ -220,7 +222,7 @@ namespace Int_something
             return -1;
         }
 
-        public bool getNextProblem()
+        public bool GetNextProblem()
         {
             if (tasks.Count > 0 && problemsToOut.Count > 0)
             {
@@ -229,42 +231,6 @@ namespace Int_something
                 return true;
             }
             return false;
-        }
-
-        internal execute_all execute_all
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-            }
-        }
-
-        internal execute_all execute_all1
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-            }
-        }
-
-        internal id_Table id_Table
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-            }
         }
     }
 

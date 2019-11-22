@@ -1,25 +1,25 @@
-﻿using Int_something.TranslationResult;
+﻿using Interpreter.TranslationResult;
 using System;
 
-namespace Int_something
+namespace Interpreter
 {
     class execute_all : Execution
     {
         public string toOut;
         public int tokens_count = 0;
-        public LA lex;
-        public SA_LL1 synt;
-        LL1LexilacAnalyzer some, toS;
+        public LA LexicalAnalyser;
+        public SA_LL1 SyntaxAnalyser;
+        TranslationTable some, toS;
         public execute_all()
         {
         }
 
         public void solve(string[] inputCode)
         {
-            this.source = new LL1LexilacAnalyzer();
-            lex = new LA(inputCode);
-            toS = new LL1LexilacAnalyzer();
-            some = new LL1LexilacAnalyzer();
+            this.source = new TranslationTable();
+            LexicalAnalyser = new LA(inputCode);
+            toS = new TranslationTable();
+            some = new TranslationTable();
             try
             {
                 Init();
@@ -28,15 +28,14 @@ namespace Int_something
         }
         void Init()
         {
-            toOut = "";
-            some = lex.TranslateCode();
-            if (lex.ErrorListLA.Count > 0)
+            some = LexicalAnalyser.TranslateCode();
+            if (LexicalAnalyser.ErrorListLA.Count > 0)
                 return;
             toSA();
-            synt = new SA_LL1(toS.TranslationList);
-            if (synt.errLog.Count > 0)
+            SyntaxAnalyser = new SA_LL1(toS.TranslationList);
+            if (SyntaxAnalyser.errLog.Count > 0)
                 return;
-            synt.Do();
+            SyntaxAnalyser.Do();
             this.regroup();
             toOut += "\n";
             foreach (LexicalToken t in source.TranslationList)
@@ -56,8 +55,9 @@ namespace Int_something
                     toS.TranslationList.Enqueue(b);
                 }
             }
+
             tokens_count = toS.TranslationList.Count;
-            this.source = some;
+            source = some;
         }
     }
 }

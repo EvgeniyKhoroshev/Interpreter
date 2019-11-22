@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Diagnostics;
 using System.Collections;
-namespace Int_something
+namespace Interpreter
 {
     class SA_LR1
     {

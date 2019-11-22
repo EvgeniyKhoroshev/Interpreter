@@ -1,4 +1,4 @@
-﻿namespace Int_something
+﻿namespace Interpreter
 {
     partial class IOform
     {

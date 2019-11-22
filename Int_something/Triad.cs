@@ -1,23 +1,13 @@
-﻿using Int_something.TranslationResult;
+﻿using Interpreter.TranslationResult;
 using System;
 using System.Collections.Generic;
 
-namespace Int_something
+namespace Interpreter
 {
     class Triad : PostfixNotation
     {
         private int triadCounter = 0;
-
-        public struct Triada
-        {
-            public int TriadNumber;
-            public LexicalToken FirstOperand;
-            public LexicalToken SecondOperand;
-            public LexicalToken Operation;
-        }
-
-
-
+        LexicalToken Buffer = new LexicalToken();
         public Triada BufferTriada;
         Stack<LexicalToken> workStack;
         public Triada[] ThreeAddressCode;
@@ -27,7 +17,7 @@ namespace Int_something
             BufferTriada = new Triada();
             workStack = new Stack<LexicalToken>();
             ThreeAddressCodeQueue = new Queue<Triada>();
-            ClearBuffer();
+            Buffer.Clear();
             while (output.Count > 0)
             {
                 Buffer = output.Dequeue();
@@ -37,7 +27,7 @@ namespace Int_something
         }
         void createTriad()
         {
-            ClearBuffer();
+            Buffer.Clear();
             Buffer.Value = "T" + Convert.ToString(triadCounter);
             Buffer.Token = 'T';
             Buffer.numberInProgram = triadCounter;
@@ -49,7 +39,7 @@ namespace Int_something
                 case 'i':
                 case 'e':
                     BufferTriada.Operation = Buffer;
-                    ClearBuffer();
+                    Buffer.Clear();
                     BufferTriada.FirstOperand = workStack.Pop();
                     BufferTriada.TriadNumber = triadCounter;
                     createTriad();
@@ -69,7 +59,7 @@ namespace Int_something
                 case '=':
                 case 'c':
                     BufferTriada.Operation = Buffer;
-                    ClearBuffer();
+                    Buffer.Clear();
                     BufferTriada.SecondOperand = workStack.Pop();
                     BufferTriada.FirstOperand = workStack.Pop();
                     BufferTriada.TriadNumber = triadCounter;
@@ -84,7 +74,7 @@ namespace Int_something
                     BufferTriada.Operation = Buffer;
                     if (Buffer.isConditionalBranch)
                         BufferTriada.FirstOperand = workStack.Pop();
-                    ClearBuffer();
+                    Buffer.Clear();
                     BufferTriada.TriadNumber = triadCounter;
                     createTriad();
                     ThreeAddressCodeQueue.Enqueue(BufferTriada);
@@ -96,7 +86,7 @@ namespace Int_something
 
         public void clearBuf()
         {
-            ClearBuffer();
+            Buffer.Clear();
             BufferTriada.Operation = Buffer;
             BufferTriada.FirstOperand = Buffer;
             BufferTriada.SecondOperand = Buffer;

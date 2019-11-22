@@ -1,10 +1,7 @@
-﻿using Int_something.TranslationResult;
-using System;
+﻿using Interpreter.TranslationResult;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 
-namespace Int_something
+namespace Interpreter
 {
     public class id_Table
     {
@@ -80,18 +77,6 @@ namespace Int_something
                 return false;
             }
             return true;
-        }
-
-        internal SA_LL1 SA_LL1
-        {
-            get
-            {
-                throw new System.NotImplementedException();
-            }
-
-            set
-            {
-            }
         }
     }
 

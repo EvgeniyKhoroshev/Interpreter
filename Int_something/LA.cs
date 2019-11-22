@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Collections;
 
-namespace Int_something
+namespace Interpreter
 {
     public class LA
     {
@@ -92,10 +92,10 @@ namespace Int_something
             }
             return -1;
         }
-        public LL1LexilacAnalyzer TranslateCode() //Лексический анализ
+        public TranslationTable TranslateCode() //Лексический анализ
         {
             stateLogLA = "Лог состояний: \n";
-            LL1LexilacAnalyzer OutputTable = new LL1LexilacAnalyzer(); //Выходная таблица трансляции;
+            TranslationTable OutputTable = new TranslationTable(); //Выходная таблица трансляции;
             id_Table identifiers = new id_Table();
             State = 0;
             int j = 0;
@@ -449,6 +449,7 @@ namespace Int_something
                     }
                 }
             }
+
             return OutputTable;
         }
     }

@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Int_something
+namespace Interpreter
 {
     public partial class Form1 : Form
     {
@@ -56,7 +56,7 @@ namespace Int_something
             if (cmp.currentScore >= 80)
             {
 
-                if (!cmp.getNextProblem())
+                if (!cmp.GetNextProblem())
                 {
                     cmp.addCurrentResult();
                     MessageBox.Show("Это была последняя задача. Ваш результат:" + (cmp.getFinalResult()).ToString());
@@ -95,18 +95,18 @@ namespace Int_something
             execution.solve(richTextBox1.Lines);
             richTextBox5.AppendText("Количество токенов: " + Convert.ToString(execution.tokens_count) + "\n");
             richTextBox3.Text += execution.toOut;
-            if (execution.lex.ErrorListLA.Count > 0)
-            foreach (string s in execution.lex.ErrorListLA)
+            if (execution.LexicalAnalyser.ErrorListLA.Count > 0)
+            foreach (string s in execution.LexicalAnalyser.ErrorListLA)
             {
                 richTextBox2.Text += '\n' + s;
             }
             richTextBox3.AppendText("\nСписок состояний:\n");
-            richTextBox3.AppendText(execution.lex.stateLogLA + "\n");
+            richTextBox3.AppendText(execution.LexicalAnalyser.stateLogLA + "\n");
 
             foreach (string s in execution.source.Identifiers.errors)
                 richTextBox2.AppendText(s);
-            richTextBox4.AppendText(execution.synt.Log + "\n");
-            foreach (var s in execution.synt.errLog)
+            richTextBox4.AppendText(execution.SyntaxAnalyser.Log + "\n");
+            foreach (var s in execution.SyntaxAnalyser.errLog)
                 richTextBox2.AppendText(s + "\n");
             foreach (var x in execution.source.Identifiers.intTable)
                 richTextBox5.AppendText(x.Value.name + "  " + "INT \n");

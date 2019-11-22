@@ -1,4 +1,4 @@
-﻿namespace Int_something
+﻿namespace Interpreter
 {
     partial class BS
     {
@@ -75,7 +75,7 @@
             // 
             // image1
             // 
-            this.image1.BackgroundImage = global::Int_something.Properties.Resources.Image1;
+            this.image1.BackgroundImage = global::Interpreter.Properties.Resources.Image1;
             this.image1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.image1.Location = new System.Drawing.Point(4, 22);
             this.image1.Name = "image1";
@@ -87,7 +87,7 @@
             // 
             // image2
             // 
-            this.image2.BackgroundImage = global::Int_something.Properties.Resources.Image2;
+            this.image2.BackgroundImage = global::Interpreter.Properties.Resources.Image2;
             this.image2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.image2.Location = new System.Drawing.Point(4, 22);
             this.image2.Name = "image2";
@@ -98,7 +98,7 @@
             // 
             // image3
             // 
-            this.image3.BackgroundImage = global::Int_something.Properties.Resources.Image3;
+            this.image3.BackgroundImage = global::Interpreter.Properties.Resources.Image3;
             this.image3.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.image3.Location = new System.Drawing.Point(4, 22);
             this.image3.Name = "image3";

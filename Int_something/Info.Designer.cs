@@ -1,4 +1,4 @@
-﻿namespace Int_something
+﻿namespace Interpreter
 {
     partial class Info
     {
@@ -53,7 +53,7 @@
             // 
             // tabPage1
             // 
-            this.tabPage1.BackgroundImage = global::Int_something.Properties.Resources.infoBG;
+            this.tabPage1.BackgroundImage = global::Interpreter.Properties.Resources.infoBG;
             this.tabPage1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.tabPage1.Location = new System.Drawing.Point(4, 25);
             this.tabPage1.Name = "tabPage1";
@@ -65,7 +65,7 @@
             // 
             // tabPage2
             // 
-            this.tabPage2.BackgroundImage = global::Int_something.Properties.Resources.infoBG_code;
+            this.tabPage2.BackgroundImage = global::Interpreter.Properties.Resources.infoBG_code;
             this.tabPage2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.tabPage2.Location = new System.Drawing.Point(4, 25);
             this.tabPage2.Name = "tabPage2";
