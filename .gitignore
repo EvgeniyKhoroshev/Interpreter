@@ -1,1 +1,15 @@
 *.lock
+*.exe
+*.txt
+*.exe.config
+*.ide
+*.ide-shm
+*.ide-wal
+*.pdb
+*.settings
+*.suo
+*.*.manifest
+*.dll
+*.*.resources
+*.*.cache
+*.cache

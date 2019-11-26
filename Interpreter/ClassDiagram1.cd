@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1" MembersFormat="FullSignature">
+  <Class Name="Interpreter.Compare">
+    <Position X="12.25" Y="7.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Properties" Collapsed="true" />
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <AssociationLine Name="id_Table" Type="Interpreter.id_Table" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="14.125" Y="7.5" />
+        <Point X="14.125" Y="7.209" />
+        <Point X="11.375" Y="7.209" />
+        <Point X="11.375" Y="6.197" />
+        <Point X="11.75" Y="6.197" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAQUBAAAAAAAAAIgAQIAAAIAAAIQBwAAKBQAAAgQAA=</HashCode>
+      <FileName>Compare.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="execute_all1" />
+      <Property Name="id_Table" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Interpreter.execute_all" Collapsed="true">
+    <Position X="6.25" Y="8.75" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAQABAiAAAgAAAAgCAAAQAACAAAAAAA=</HashCode>
+      <FileName>execute_all.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Interpreter.Execution" Collapsed="true">
+    <Position X="6.25" Y="7.25" Width="2" />
+    <InheritanceLine Type="Interpreter.Triad" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.25" Y="6.191" />
+        <Point X="7.25" Y="6.625" />
+        <Point X="7.25" Y="6.625" />
+        <Point X="7.25" Y="7.25" />
+      </Path>
+    </InheritanceLine>
+    <AssociationLine Name="id_Table" Type="Interpreter.id_Table" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7.781" Y="7.25" />
+        <Point X="7.781" Y="7.05" />
+        <Point X="8.45" Y="7.05" />
+        <Point X="8.45" Y="7.209" />
+        <Point X="9.042" Y="7.209" Type="JumpStart" />
+        <Point X="9.208" Y="7.209" Type="JumpEnd" />
+        <Point X="12.062" Y="7.209" />
+        <Point X="12.062" Y="6.96" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAgwAAIAAAKAIAgAAUAAAkgUAAAAAASECCQAFAAAAA=</HashCode>
+      <FileName>Execution.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="id_Table" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Interpreter.id_Table">
+    <Position X="11.75" Y="4.25" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <TypeIdentifier>
+      <HashCode>AQAAQAAAAACAAAAgAAEAAAAAAAAAAACgBAAAAAAAAAA=</HashCode>
+      <FileName>id_Table.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="SA_LL1" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Interpreter.SA_LL1">
+    <Position X="15.5" Y="1.75" Width="2" />
+    <AssociationLine Name="toPostfix" Type="Interpreter.toPostfix" ManuallyRouted="true" FixedFromPoint="true">
+      <Path>
+        <Point X="15.5" Y="3.171" />
+        <Point X="9.125" Y="3.171" />
+        <Point X="9.125" Y="7.889" />
+        <Point X="5.958" Y="7.889" Type="JumpStart" />
+        <Point X="5.792" Y="7.889" Type="JumpEnd" />
+        <Point X="4.75" Y="7.889" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAEAEQAAABAQAAAAABAgQAQACAhAABAAAABAAAABAAA=</HashCode>
+      <FileName>SA_LL1.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="toPostfix" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Interpreter.LA">
+    <Position X="2.75" Y="1.25" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AAgAAAAAAAAQAEAACIAgQAAAAAACAAAAAAAABAgIAAA=</HashCode>
+      <FileName>LA.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="TranslationTable" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Interpreter.toPostfix">
+    <Position X="2.75" Y="4.75" Width="2" />
+    <InheritanceLine Type="Interpreter.TranslationTable" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="6" Y="3.575" />
+        <Point X="6" Y="4.627" />
+        <Point X="3.75" Y="4.627" />
+        <Point X="3.75" Y="4.75" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>HCAABAEAAEQAICIBAAIAAABACAAAAEhEAAAAAAAAAAA=</HashCode>
+      <FileName>toPostfix.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Interpreter.TranslationTable">
+    <Position X="5" Y="1.25" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <AssociationLine Name="id_Table" Type="Interpreter.id_Table" ManuallyRouted="true" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7" Y="2.413" />
+        <Point X="8.625" Y="2.413" />
+        <Point X="8.625" Y="5.456" />
+        <Point X="9.042" Y="5.456" Type="JumpStart" />
+        <Point X="9.208" Y="5.456" Type="JumpEnd" />
+        <Point X="11.75" Y="5.456" />
+      </Path>
+    </AssociationLine>
+    <AssociationLine Name="SA_LL1" Type="Interpreter.SA_LL1" FixedFromPoint="true" FixedToPoint="true">
+      <Path>
+        <Point X="7" Y="1.767" />
+        <Point X="15.25" Y="1.767" />
+        <Point X="15.25" Y="1.5" />
+        <Point X="16.5" Y="1.5" />
+        <Point X="16.5" Y="1.75" />
+      </Path>
+    </AssociationLine>
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAEAAAABCAAAgIAQAg=</HashCode>
+      <FileName>TranslationTable.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="id_Table" />
+      <Property Name="SA_LL1" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Interpreter.Triad" Collapsed="true">
+    <Position X="6.25" Y="5.5" Width="2" />
+    <Compartments>
+      <Compartment Name="Nested Types" Collapsed="false" />
+    </Compartments>
+    <InheritanceLine Type="Interpreter.toPostfix" FixedFromPoint="true">
+      <Path>
+        <Point X="3.75" Y="9.703" />
+        <Point X="3.75" Y="10.079" />
+        <Point X="5.875" Y="10.079" />
+        <Point X="5.875" Y="5.846" />
+        <Point X="6.25" Y="5.846" />
+      </Path>
+    </InheritanceLine>
+    <TypeIdentifier>
+      <HashCode>ABAAAAACAAAAAAAkAAAAAAAAAAAAAAAEQCAACAAAAAA=</HashCode>
+      <FileName>Triad.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>
