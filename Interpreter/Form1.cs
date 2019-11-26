@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Interpreter.Translation;
+using System;
 using System.Linq;
 using System.Windows.Forms;
 
@@ -9,7 +10,7 @@ namespace Interpreter
 
         execute_all execution;
         Compare cmp;
-        bool isDeveloper = false;
+        bool isDeveloper = true;
         BS imageForm;
         string basic_text = "Program\n{\n\n}";
         public Form1()
@@ -115,7 +116,7 @@ namespace Interpreter
             richTextBox5.AppendText("\n-------------------\n\n");
             foreach (var x in execution.regroupedTable.TranslationList)
             {
-                if (x.Token == '{' || x.Token == TranslationToken.Semicolon)
+                if (x.Token == TranslationToken.LeftBrace || x.Token == TranslationToken.Semicolon)
                 {
                     richTextBox5.AppendText(x.Value + "  " + "\n  ");
                     continue;
@@ -126,7 +127,7 @@ namespace Interpreter
             richTextBox5.AppendText("\n-------------------\n\n");
             foreach (var x in execution.output)
             {
-                if (x.Token == '{' || x.Token == TranslationToken.Semicolon || x.Token == ':' || x.Token == '>')
+                if (x.Token == TranslationToken.LeftBrace || x.Token == TranslationToken.Semicolon || x.Token == TranslationToken.GotoLabel || x.Token == TranslationToken.GotoTransition)
                 {
                     if (x.Token != TranslationToken.Semicolon)
                         richTextBox5.AppendText(x.Token + "  " + "\n  ");

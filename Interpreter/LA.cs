@@ -51,11 +51,11 @@ namespace Interpreter
         // Вектор терминальных символов
         private char[] Rows =
             {
-                                'B',    'O',    'L',    'i',    'R',    'E',
+                                'B',    'O',    'L',    'I',    'R',    'E',
                                 'A',    'K',    'T',    'U',    'F',    'S',
                                 'C',    'H',    'S',    'W',    'N',    'P',
                                 '0',    '0',    '+',    '-',    '*',    '=',
-                                '<',    '>',    '(',    ')',    ';',    ',',
+                                '<',    ':',    '(',    ')',    ';',    ',',
                                 '/',    '%',    ' ',    '{',    '}' ,   '$'
 
             };
@@ -246,19 +246,19 @@ namespace Interpreter
                             OutputTable.Buffer.Value = "{";
                             OutputTable.Buffer.LexemeNumber = 10;
                             OutputTable.Buffer.StringNumber = i;
-                            OutputTable.Buffer.Token = '{';
+                            OutputTable.Buffer.Token = TranslationToken.LeftBrace;
                             OutputTable.Buffer.AttributeValue = "LPAR_S";
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             flag = false;
                             OutputTable.Put();
                             lexBuf = "";
                             State = 0;
-                            break;
+                            break; 
                         case 111:
                             OutputTable.Buffer.Value = "}";
                             OutputTable.Buffer.LexemeNumber = 11;
                             OutputTable.Buffer.StringNumber = i;
-                            OutputTable.Buffer.Token = '}';
+                            OutputTable.Buffer.Token = TranslationToken.RightBrace;
                             OutputTable.Buffer.AttributeValue = "RPAR_S";
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
@@ -275,12 +275,12 @@ namespace Interpreter
                             OutputTable.Put();
                             lexBuf = "";
                             State = 0;
-                            break;
+                            break; 
                         case 113:
                             OutputTable.Buffer.Value = " ";
                             OutputTable.Buffer.LexemeNumber = 13;
                             OutputTable.Buffer.StringNumber = i;
-                            OutputTable.Buffer.Token = '_';
+                            OutputTable.Buffer.Token = TranslationToken.Space;
                             OutputTable.Buffer.AttributeValue = "SPACE";
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
@@ -342,7 +342,7 @@ namespace Interpreter
                             OutputTable.Buffer.Value = lexBuf;
                             OutputTable.Buffer.LexemeNumber = 18;
                             OutputTable.Buffer.StringNumber = i;
-                            OutputTable.Buffer.Token = TranslationToken.Constant;
+                            OutputTable.Buffer.Token = TranslationToken.ComparsionOpearation;
                             OutputTable.Buffer.AttributeValue = "COMPARSION";
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();

@@ -128,6 +128,21 @@
         /// <summary>
         /// $.
         /// </summary>
-        EndOfProgram = 24
+        EndOfProgram = 24,
+
+        /// <summary>
+        /// T.
+        /// </summary>
+        Triada = 25,
+
+        /// <summary>
+        /// :.
+        /// </summary>
+        GotoLabel = 26,
+
+        /// <summary>
+        /// >.
+        /// </summary>
+        GotoTransition = 27,
     }
 }

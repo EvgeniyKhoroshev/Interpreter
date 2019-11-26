@@ -56,11 +56,11 @@ namespace Interpreter
 
 };
         Stack WorkStack, OutputStack;
-        char[] LLColumn = {'X', 'B', 'd', 'R', TranslationToken.InputKeyword, 'W', TranslationToken.InputKeyword, 'e', 'C', 'E', 'c', ';', ',', '{',
-                           '}', '(', ')', '=', '+', '-', '*', '/', '%','$' };
-        string[]LLRow={"<P>", "<POp>", "<O>", "<a>", "<Op>", "<b>", "<LID>", "<c>", "<V>", "<d>",
+        char[] LLColumn = {'X', 'B', 'd', 'R', 'I', 'W', 'i', 'e', 'C', 'E', 'c', ';', ',', '{',
+            '}', '(', ')', '=', '+', '-', '*', '/', '%','$' };
+        string[] LLRow ={"<P>", "<POp>", "<O>", "<a>", "<Op>", "<b>", "<LID>", "<c>", "<V>", "<d>",
             "<e>", "<f>", "<F>", "<g>", "<h>", "<PV>", "<o>", "<Cmp>", "X", "B", "d", "R", "I", "W",
-            "i", "e", "C", "E", "c", ";", ",", "{", "}", "(", ")", "=", "+", "-", "*", "/",	"%","$" };
+            "i", "e", "C", "E", "c", ";", ",", "{", "}", "(", ")", "=", "+", "-", "*", "/", "%","$" };
         public string Log;
         Queue<LexicalToken> input;
         LexicalToken buffer = new LexicalToken();
@@ -90,7 +90,7 @@ namespace Interpreter
                 try
                 {
                     r = GetRowByID(Convert.ToString(WorkStack.Peek()));
-                    c = (int)buffer.Token;
+                    c = (int)buffer.Token - 1;
                     if (r != -1 && -1 != c)
                     {
                         param = LLTable[r, c];

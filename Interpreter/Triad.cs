@@ -29,8 +29,8 @@ namespace Interpreter
         void createTriad()
         {
             Buffer.Clear();
-            Buffer.Value = "T" + Convert.ToString(triadCounter);
-            Buffer.Token = 'T';
+            Buffer.Value = Convert.ToString(triadCounter);
+            Buffer.Token = TranslationToken.Triada;
             Buffer.LineNumber = triadCounter;
         }
         private void ActionCase()
@@ -58,7 +58,7 @@ namespace Interpreter
                 case TranslationToken.MultipleOperation:
                 case TranslationToken.RemainderOfTheDivisionOperation:
                 case TranslationToken.AssignOperation:
-                case TranslationToken.Constant:
+                case TranslationToken.ComparsionOpearation:
                     BufferTriada.Operation = Buffer;
                     Buffer.Clear();
                     BufferTriada.SecondOperand = workStack.Pop();
@@ -70,8 +70,8 @@ namespace Interpreter
                     clearBuf();
                     ++triadCounter;
                     break;
-                case ':':
-                case '>':
+                case TranslationToken.GotoLabel:
+                case TranslationToken.GotoTransition:
                     BufferTriada.Operation = Buffer;
                     if (Buffer.isConditionalBranch)
                         BufferTriada.FirstOperand = workStack.Pop();

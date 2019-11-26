@@ -1,4 +1,5 @@
-﻿using Interpreter.TranslationResult;
+﻿using Interpreter.Translation;
+using Interpreter.TranslationResult;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -150,9 +151,9 @@ namespace Interpreter
             currentTask.basicEcho.AttributeValue = "A";
             currentTask.triadCount = 2;
             currentTask.basicID.Value = "A";
-            currentTask.basicID.Token = 'X';
+            currentTask.basicID.Token = TranslationToken.Identifier;
             currentTask.basicID.AttributeValue = "50";
-            currentTask.basicInput.AttributeValue = "";
+            currentTask.basicInput.AttributeValue = ""; 
             tasks.Enqueue(currentTask);
             currentProblem.problemImage = true;
             currentProblem.problemIndex = 1;
@@ -165,7 +166,7 @@ namespace Interpreter
             currentTask.basicEcho.AttributeValue = "B";
             currentTask.triadCount = 5;
             currentTask.basicID.Value = "A";
-            currentTask.basicID.Token = 'X';
+            currentTask.basicID.Token = TranslationToken.Identifier;
 
             currentTask.basicInput.AttributeValue = "A";
             tasks.Enqueue(currentTask);
@@ -180,7 +181,7 @@ namespace Interpreter
             currentTask.basicEcho.AttributeValue = "RESULT";
             currentTask.triadCount = 18;
             currentTask.basicID.Value = "COUNTER";
-            currentTask.basicID.Token = 'X';
+            currentTask.basicID.Token = TranslationToken.Identifier;
 
             currentTask.basicInput.AttributeValue = "FACT";
             tasks.Enqueue(currentTask);
@@ -210,14 +211,14 @@ namespace Interpreter
         int FindInput()
         {
             for (int i = 0; i < input.ThreeAddressCode.Count(); ++i)
-                if (input.ThreeAddressCode[i].Operation.Token == 'i')
+                if (input.ThreeAddressCode[i].Operation.Token == TranslationToken.InputKeyword)
                     return i;
             return -1;
         }
         int FindEcho()
         {
             for (int i = input.ThreeAddressCode.Count() - 1; i > 0; --i)
-                if (input.ThreeAddressCode[i].Operation.Token == 'e')
+                if (input.ThreeAddressCode[i].Operation.Token == TranslationToken.EchoKeyword)
                     return i;
             return -1;
         }

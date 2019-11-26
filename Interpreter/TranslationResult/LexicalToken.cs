@@ -39,7 +39,7 @@ namespace Interpreter.TranslationResult
         public static void Clear(this LexicalToken source)
         {
             source.LineNumber = 0;
-            source.Token = ' ';
+            source.Token = TranslationToken.Space;
             source.Value = "";
             source.LexemeNumber = 0;
             source.StringNumber = 0;

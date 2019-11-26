@@ -2,9 +2,6 @@
 using Interpreter.TranslationResult;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Interpreter
 {
@@ -15,7 +12,13 @@ namespace Interpreter
         private int markCounter = 0, currentOut = -1;                           // Счетчик меток; индикатор открытого цикла
         private bool subString = false;                                         // Флаг для разбора условий
         public TranslationTable source;                                         // Исходный класс для разбора
-        private Dictionary<char, int> hashTable = new Dictionary<char, int>();  // Таблица приоритетов операций
+
+        /// <summary>
+        /// Cловарь приоритетов операций.
+        /// </summary>
+        private readonly Dictionary<TranslationToken, int> _priorityTable 
+            = new Dictionary<TranslationToken, int>();
+
         public Queue<LexicalToken> output;                                  // Результат преобразования в инверсную запись
         private int priority = 0;                                               // Текущий приоритет операций
         public string out_log;                                                  // Лог для ошибок
@@ -28,7 +31,7 @@ namespace Interpreter
             while (source.TranslationList.Count > 0)                            // Основной цикл для прогона всех обектов
             {
                 regroupedTable.Buffer = source.TranslationList.Dequeue();       // Извлекаем объект из класса-источника в буфер
-                if (flag && (regroupedTable.Buffer.Token == '{'))               // Наличие флага и "{" говорит о необходимости 
+                if (flag && (regroupedTable.Buffer.Token == TranslationToken.LeftBrace))               // Наличие флага и "{" говорит о необходимости 
                                                                                 //пропустить имя программы и добавить "{"
                 {
                     regroupedTable.Put();
@@ -131,10 +134,10 @@ namespace Interpreter
             Buffer.Clear();
             Buffer = regroupedTable.TranslationList.Dequeue();
             currentOut = loopOut;
-            if (Buffer.Token == '{')
+            if (Buffer.Token == TranslationToken.LeftBrace)
             {
                 Buffer.Clear();
-                while (Buffer.Token != '}')
+                while (Buffer.Token != TranslationToken.RightBrace)
                 {
                     Buffer = regroupedTable.TranslationList.Dequeue();
                     casesOfTransactions();
@@ -169,10 +172,10 @@ namespace Interpreter
             Buffer.Clear();
             // Транслируем множественные/одиночные выражения цикла
             Buffer = regroupedTable.TranslationList.Dequeue();
-            if (Buffer.Token == '{')
+            if (Buffer.Token == TranslationToken.LeftBrace)
             {
                 Buffer.Clear();
-                while (Buffer.Token != '}')
+                while (Buffer.Token != TranslationToken.RightBrace)
                 {
                     Buffer = regroupedTable.TranslationList.Dequeue();
                     casesOfTransactions();
@@ -194,10 +197,10 @@ namespace Interpreter
             {
                 regroupedTable.TranslationList.Dequeue();
                 Buffer = regroupedTable.TranslationList.Dequeue();
-                if (Buffer.Token == '{')
+                if (Buffer.Token == TranslationToken.LeftBrace)
                 {
                     Buffer.Clear();
-                    while (Buffer.Token != '}')
+                    while (Buffer.Token != TranslationToken.RightBrace)
                     {
                         Buffer = regroupedTable.TranslationList.Dequeue();
                         casesOfTransactions();
@@ -223,7 +226,7 @@ namespace Interpreter
         void createMark(int mark)                                               // Функция создания n-ой метки
         {
             Buffer.Clear();
-            Buffer.Token = ':';
+            Buffer.Token = TranslationToken.GotoLabel;
             Buffer.Value = "Label " + Convert.ToString(mark)+":";
             Buffer.AttributeValue = "LABEL";
             Buffer.LexemeNumber = 100;
@@ -233,7 +236,7 @@ namespace Interpreter
         void createTransition(int mark, bool conditional)                       // Функция создания условного/безусловного перехода к метке
         {
             Buffer.Clear();
-            Buffer.Token = '>';
+            Buffer.Token = TranslationToken.GotoTransition;
             Buffer.Value = "goto " + Convert.ToString(mark);
             Buffer.AttributeValue = "GOTO";
             Buffer.LexemeNumber = 200;
@@ -248,14 +251,14 @@ namespace Interpreter
             while (true)
             {
                 // Проверка на некорректность данных.
-                if (Buffer.Token == '{' || Buffer.Token == '}' ||
+                if (Buffer.Token == TranslationToken.LeftBrace || Buffer.Token == TranslationToken.RightBrace ||
                     Buffer.Token == TranslationToken.Semicolon || Buffer.Token == TranslationToken.WhileKeyword ||
                     Buffer.Token == TranslationToken.InputKeyword || Buffer.Token == TranslationToken.InputKeyword ||
                     Buffer.Token == TranslationToken.EchoKeyword)
                     break;
                 if (Buffer.Token == TranslationToken.LeftParentheses)
                 {
-                    priority = hashTable[Buffer.Token];
+                    priority = _priorityTable[Buffer.Token];
                     workStack.Push(Buffer);
                     Buffer.Clear();
                     Buffer = regroupedTable.TranslationList.Dequeue();
@@ -270,7 +273,7 @@ namespace Interpreter
                     {
                         workStack.Pop();
                         if (workStack.Count > 0)
-                            priority = hashTable[workStack.Peek().Token];
+                            priority = _priorityTable[workStack.Peek().Token];
                         else if (subString)
                         {
                             subString = false;
@@ -289,10 +292,10 @@ namespace Interpreter
                     Buffer = regroupedTable.TranslationList.Dequeue();
                     continue;
                 }
-                if (hashTable.ContainsKey(Buffer.Token))
-                    if (priority < hashTable[Buffer.Token])
+                if (_priorityTable.ContainsKey(Buffer.Token))
+                    if (priority < _priorityTable[Buffer.Token])
                     {
-                        priority = hashTable[Buffer.Token];
+                        priority = _priorityTable[Buffer.Token];
                         workStack.Push(Buffer);
                         Buffer.Clear();
                         Buffer = regroupedTable.TranslationList.Dequeue();
@@ -302,7 +305,7 @@ namespace Interpreter
                     {
                         while (true)
                         {
-                            if (workStack.Count > 0 && hashTable[Buffer.Token] <= hashTable[workStack.Peek().Token])
+                            if (workStack.Count > 0 && _priorityTable[Buffer.Token] <= _priorityTable[workStack.Peek().Token])
                                 output.Enqueue(workStack.Pop());
                             else
                             {
@@ -318,25 +321,27 @@ namespace Interpreter
                     workStack.Pop();
                 else
                     output.Enqueue(workStack.Pop());
-            if (Buffer.Token != TranslationToken.RightParentheses && Buffer.Token != TranslationToken.LeftParentheses && Buffer.Token != '}' && Buffer.Token != '{')
+            if (Buffer.Token != TranslationToken.RightParentheses && Buffer.Token != TranslationToken.LeftParentheses && Buffer.Token != TranslationToken.RightBrace && Buffer.Token != TranslationToken.LeftBrace)
                 output.Enqueue(Buffer);
         }
 
-        void HashInit()                                                         // Инициализация хэш-таблицы приоритетов
+        /// <summary>
+        /// Инициализация словаря приоритетов.
+        /// </summary>
+        void HashInit() 
         {
-            hashTable.Add(TranslationToken.Semicolon, 0);
-            hashTable.Add(TranslationToken.AssignOperation, 1);
-            hashTable.Add(TranslationToken.LeftParentheses, 2);
-            hashTable.Add(TranslationToken.RightParentheses, 2);
-            hashTable.Add('}', 2);
-            hashTable.Add('{', 2);
-            hashTable.Add('C', 3);
-            hashTable.Add('+', 4);
-            hashTable.Add(TranslationToken.MinusOperation, 4);
-            hashTable.Add(TranslationToken.RemainderOfTheDivisionOperation, 5);
-            hashTable.Add(TranslationToken.MultipleOperation, 6);
-            hashTable.Add(TranslationToken.DivisionOperation, 6);
-
+            _priorityTable.Add(TranslationToken.Semicolon, 0);
+            _priorityTable.Add(TranslationToken.AssignOperation, 1);
+            _priorityTable.Add(TranslationToken.LeftParentheses, 2);
+            _priorityTable.Add(TranslationToken.RightParentheses, 2);
+            _priorityTable.Add(TranslationToken.LeftBrace, 2);
+            _priorityTable.Add(TranslationToken.RightBrace, 2);
+            _priorityTable.Add(TranslationToken.ComparsionOpearation, 3);
+            _priorityTable.Add(TranslationToken.PlusOperation, 4);
+            _priorityTable.Add(TranslationToken.MinusOperation, 4);
+            _priorityTable.Add(TranslationToken.RemainderOfTheDivisionOperation, 5);
+            _priorityTable.Add(TranslationToken.MultipleOperation, 6);
+            _priorityTable.Add(TranslationToken.DivisionOperation, 6);
         }
     }
 }

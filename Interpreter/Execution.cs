@@ -90,7 +90,7 @@ namespace Interpreter
                     source.Identifiers.intTable[currentInt.name] = currentInt;
                     pointer++;
                     break;
-                case '>':
+                case TranslationToken.GotoTransition:
                     if (ThreeAddressCode[pointer].Operation.isConditionalBranch)
                         if (triadResult[pointer - 1] == "FALSE")
                             if (findLabel(ThreeAddressCode[pointer].Operation.StringNumber) != -1)
@@ -133,7 +133,7 @@ namespace Interpreter
         int findLabel(int label)
         {
             for (int i = 0; i < ThreeAddressCode.Count(); ++i)
-                if (ThreeAddressCode[i].Operation.Token == ':' && ThreeAddressCode[i].Operation.StringNumber == label)
+                if (ThreeAddressCode[i].Operation.Token == TranslationToken.GotoLabel && ThreeAddressCode[i].Operation.StringNumber == label)
                         return i;
             return -1;
         }
@@ -307,7 +307,7 @@ namespace Interpreter
                     }
                 case TranslationToken.Constant:
                     return GetCurrentConst(input);
-                case 'T':
+                case TranslationToken.Triada:
                     {
                         if (CompareBool(triadResult[input.LineNumber], true))
                         {
@@ -404,7 +404,7 @@ namespace Interpreter
                             source.Identifiers.intTable[currentInt.name] = currentInt;
                             ClearBuff();
                             break;
-                        case 'T': // ???
+                        case TranslationToken.Triada:
                             if (triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] != "" &&
                                 triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] != "TRUE" &&
                                 triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] != "FALSE")
@@ -458,7 +458,7 @@ namespace Interpreter
                             source.Identifiers.boolTable[currentBool.name] = currentBool;
                             ClearBuff();
                             break;
-                        case 'T':
+                        case TranslationToken.Triada:
                             if (triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] == "TRUE" ||
                                 triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] == "FALSE")
                             {
