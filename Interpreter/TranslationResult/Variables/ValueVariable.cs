@@ -10,7 +10,7 @@
         /// <summary>
         /// Тип данных.
         /// </summary>
-        public virtual DataType Type { get; protected set; } 
+        public virtual DataType Type { get; protected set; }
 
         /// <summary>
         /// Значение переменной.

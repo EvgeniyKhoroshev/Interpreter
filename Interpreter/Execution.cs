@@ -1,26 +1,22 @@
 ﻿using Interpreter.Translation;
 using Interpreter.TranslationResult;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Interpreter
 {
-    
-    class Execution : Triad
+    internal class Execution : Triad
     {
-        IOform Ibuf;
+        private IOform Ibuf;
         public string error;
         private int pointer = 0;
         private bool outFlag = false;
-        public string [] triadResult;
+        public string[] triadResult;
         public id_Table.ID_int currentInt;
-        id_Table.ID_bool currentBool;
-        id_Table.ID_int bufInt;
-        id_Table.ID_bool bufBool;
+        private id_Table.ID_bool currentBool;
+        private id_Table.ID_int bufInt;
+        private id_Table.ID_bool bufBool;
         public Execution()
         {
             Ibuf = new IOform();
@@ -42,7 +38,7 @@ namespace Interpreter
         {
 
             triadResult = new string[ThreeAddressCode.Count()];
-            while (pointer < this.ThreeAddressCode.Count() && !outFlag) 
+            while (pointer < this.ThreeAddressCode.Count() && !outFlag)
             {
                 if (ThreeAddressCode[pointer].Operation.AttributeValue == "OPERATION" || ThreeAddressCode[pointer].Operation.AttributeValue == "COMPARSION")
                     ProcessOperation();
@@ -62,7 +58,7 @@ namespace Interpreter
                 case TranslationToken.EchoKeyword:
                     if (takeOp(ThreeAddressCode[pointer].FirstOperand))
                         MessageBox.Show(currentInt.value.ToString(), "Сообщение             ");
-                    else 
+                    else
                         MessageBox.Show(currentBool.value.ToString(), "Сообщение            ");
                     ++pointer;
                     break;
@@ -78,7 +74,7 @@ namespace Interpreter
                     {
                         Convert.ToInt32(Ibuf.textBox1.Text);
                     }
-                    catch(Exception e)
+                    catch (Exception e)
                     {
                         error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Неверные данные .\n" + e.Message;
                         outFlag = true;
@@ -124,29 +120,33 @@ namespace Interpreter
                             outFlag = true;
                             return;
                         }
-                    } 
+                    }
                 default:
                     ++pointer;
                     break;
             }
         }
-        int findLabel(int label)
+
+        private int findLabel(int label)
         {
             for (int i = 0; i < ThreeAddressCode.Count(); ++i)
                 if (ThreeAddressCode[i].Operation.Token == TranslationToken.GotoLabel && ThreeAddressCode[i].Operation.StringNumber == label)
-                        return i;
+                    return i;
             return -1;
         }
-        bool checkID(LexicalToken input)
+
+        private bool checkID(LexicalToken input)
         {
             if (source.Identifiers.isIdentifierExists(input))
                 return true;
             return false;
         }
-        void operationCase(bool isInt)
+
+        private void operationCase(bool isInt)
         {
             if (isInt)
-                try {
+                try
+                {
                     switch (ThreeAddressCode[pointer].Operation.Token)
                     {
                         case TranslationToken.PlusOperation:
@@ -156,8 +156,8 @@ namespace Interpreter
                             triadResult[pointer] = (bufInt.value - currentInt.value).ToString();
                             break;
                         case TranslationToken.MultipleOperation:
-                            
-                       triadResult[pointer] = (bufInt.value * currentInt.value).ToString();
+
+                            triadResult[pointer] = (bufInt.value * currentInt.value).ToString();
                             break;
                         case TranslationToken.Constant:
                             ProcessComparsion(ThreeAddressCode[pointer].Operation, isInt);
@@ -169,7 +169,7 @@ namespace Interpreter
                             }
                             catch (DivideByZeroException)
                             {
-                                error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber +1).ToString() + "]. Деление на 0.";
+                                error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Деление на 0.";
                                 outFlag = true;
                                 return;
                             }
@@ -177,11 +177,11 @@ namespace Interpreter
                         case TranslationToken.RemainderOfTheDivisionOperation:
                             try
                             {
-                                   triadResult[pointer] = ((int)(bufInt.value % currentInt.value)).ToString();
+                                triadResult[pointer] = ((int)(bufInt.value % currentInt.value)).ToString();
                             }
                             catch (DivideByZeroException)
                             {
-                                error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber +1).ToString() + "]. Деление на 0.";
+                                error = "Строка [" + (ThreeAddressCode[pointer].Operation.StringNumber + 1).ToString() + "]. Деление на 0.";
                                 outFlag = true;
                                 return;
                             }
@@ -205,8 +205,9 @@ namespace Interpreter
                 ProcessComparsion(ThreeAddressCode[pointer].Operation, isInt);
 
             }
-        } 
-        void ProcessComparsion(LexicalToken input, bool isInt)
+        }
+
+        private void ProcessComparsion(LexicalToken input, bool isInt)
         {
             if (!isInt)
                 switch (input.Value)
@@ -246,7 +247,8 @@ namespace Interpreter
                         break;
                 }
         }
-        void ProcessOperation()
+
+        private void ProcessOperation()
         {
             ClearBuff();
             bool f = false, s = false;
@@ -257,17 +259,18 @@ namespace Interpreter
                 bufBool = currentBool;
             clearCurrent();
             s = takeOp(ThreeAddressCode[pointer].SecondOperand);
-            if (s!=f)
+            if (s != f)
             {
                 outFlag = true;
-                error = "Строка [" + (ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() + "]. Несовместимость типов данных : '" 
+                error = "Строка [" + (ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() + "]. Несовместимость типов данных : '"
                     + ThreeAddressCode[pointer].FirstOperand.Value + "' и '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
                 return;
             }
             operationCase(s);
 
         }
-        void clearCurrent()
+
+        private void clearCurrent()
         {
             currentInt.name = "";
             currentInt.numberInProgram = 0;
@@ -286,7 +289,7 @@ namespace Interpreter
                         if (source.Identifiers.intTable.ContainsKey(input.Value))
                         {
                             GetCurrentIntByID(input);
-                            return  true;
+                            return true;
                         }
                         else
                             if (source.Identifiers.boolTable.ContainsKey(input.Value))
@@ -328,7 +331,7 @@ namespace Interpreter
             return false;
         }
 
-        bool GetCurrentConst(LexicalToken input)
+        private bool GetCurrentConst(LexicalToken input)
         {
             if (CompareBool(input.Value, true))
             {
@@ -346,19 +349,22 @@ namespace Interpreter
             currentBool.numberInProgram = input.LineNumber;
             return true;
         }
-        void GetCurrentIntByID(LexicalToken input)
+
+        private void GetCurrentIntByID(LexicalToken input)
         {
             currentInt.name = input.Value;
             currentInt.value = source.Identifiers.intTable[currentInt.name].value;
             currentInt.numberInProgram = input.LineNumber;
         }
-        void GetCurrentBoolByID(LexicalToken input)
+
+        private void GetCurrentBoolByID(LexicalToken input)
         {
             currentBool.name = input.Value;
             currentBool.value = source.Identifiers.boolTable[currentBool.name].value;
             currentBool.numberInProgram = input.LineNumber;
         }
-        void ClearBuff()
+
+        private void ClearBuff()
         {
             bufInt.name = "";
             bufInt.numberInProgram = 0;
@@ -489,6 +495,6 @@ namespace Interpreter
 
         private bool CompareBool(string value, bool boolValue) =>
             string.Equals(value, boolValue.ToString(), StringComparison.InvariantCultureIgnoreCase);
-        
+
     }
 }

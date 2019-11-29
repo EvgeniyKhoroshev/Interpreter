@@ -7,12 +7,11 @@ namespace Interpreter
 {
     public partial class Form1 : Form
     {
-
-        execute_all execution;
-        Compare cmp;
-        bool isDeveloper = true;
-        BS imageForm;
-        string basic_text = "Program\n{\n\n}";
+        private execute_all execution;
+        private Compare cmp;
+        private bool isDeveloper = true;
+        private BS imageForm;
+        private string basic_text = "Program\n{\n\n}";
         public Form1()
         {
             InitializeComponent();
@@ -97,10 +96,10 @@ namespace Interpreter
             richTextBox5.AppendText("Количество токенов: " + Convert.ToString(execution.tokens_count) + "\n");
             richTextBox3.Text += execution.toOut;
             if (execution.LexicalAnalyser.ErrorListLA.Count > 0)
-            foreach (string s in execution.LexicalAnalyser.ErrorListLA)
-            {
-                richTextBox2.Text += '\n' + s;
-            }
+                foreach (string s in execution.LexicalAnalyser.ErrorListLA)
+                {
+                    richTextBox2.Text += '\n' + s;
+                }
             richTextBox3.AppendText("\nСписок состояний:\n");
             richTextBox3.AppendText(execution.LexicalAnalyser.stateLogLA + "\n");
 
@@ -156,7 +155,7 @@ namespace Interpreter
             richTextBox5.AppendText("\n-------------------\n\n");
             for (int i = 0; i < execution.triadResult.Count(); ++i)
                 if (execution.triadResult[i] != null)
-                    richTextBox5.AppendText(i.ToString()+". "+execution.triadResult[i] + "\n");
+                    richTextBox5.AppendText(i.ToString() + ". " + execution.triadResult[i] + "\n");
             string cmpResult = cmp.getResult(execution);
             if (cmpResult != "")
             {
@@ -167,7 +166,7 @@ namespace Interpreter
             foreach (var x in execution.source.Identifiers.intTable)
                 resultTextBox.AppendText("INT " + x.Value.name + " = " + x.Value.value.ToString() + "\n");
             foreach (var x in execution.source.Identifiers.boolTable)
-                resultTextBox.AppendText("BOOL " + x.Value.name + " = " + x.Value.value.ToString()+ "\n");
+                resultTextBox.AppendText("BOOL " + x.Value.name + " = " + x.Value.value.ToString() + "\n");
             richTextBox5.AppendText("\n-------------------\n\n");
             tabControl1.SelectedIndex = 1;
         }
@@ -225,7 +224,7 @@ namespace Interpreter
         private void button6_Click_1(object sender, EventArgs e)
         {
             int k = 0, j = 0;
-            int []sm = new int[6];
+            int[] sm = new int[6];
             for (int i = 1001; i < 1000000; ++i)
             {
                 for (k = 10, j = 0; j < 10; k = k * 10, ++j)

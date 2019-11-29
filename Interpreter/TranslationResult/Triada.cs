@@ -6,7 +6,7 @@
         {
             FirstOperand = new LexicalToken();
             SecondOperand = new LexicalToken();
-            Operation = new LexicalToken(); 
+            Operation = new LexicalToken();
         }
 
         public int TriadNumber;

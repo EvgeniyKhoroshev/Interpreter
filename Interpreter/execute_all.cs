@@ -4,13 +4,13 @@ using System;
 
 namespace Interpreter
 {
-    class execute_all : Execution
+    internal class execute_all : Execution
     {
         public string toOut;
         public int tokens_count = 0;
         public LA LexicalAnalyser;
         public SA_LL1 SyntaxAnalyser;
-        TranslationTable some, toS;
+        private TranslationTable some, toS;
         public execute_all()
         {
         }
@@ -27,7 +27,8 @@ namespace Interpreter
             }
             catch (Exception) { }
         }
-        void Init()
+
+        private void Init()
         {
             some = LexicalAnalyser.TranslateCode();
             if (LexicalAnalyser.ErrorListLA.Count > 0)
@@ -45,7 +46,8 @@ namespace Interpreter
             this.ProcessTriads();
             exec();
         }
-        void toSA()
+
+        private void toSA()
         {
             toOut = "Список токенов:\n";
             foreach (LexicalToken b in some.TranslationList)

@@ -5,10 +5,10 @@ using System.Collections.Generic;
 
 namespace Interpreter
 {
-    class PostfixNotation 
+    internal class PostfixNotation
     {
-        LexicalToken Buffer = new LexicalToken();
-        LexicalToken bufForIO;
+        private LexicalToken Buffer = new LexicalToken();
+        private LexicalToken bufForIO;
         private int markCounter = 0, currentOut = -1;                           // Счетчик меток; индикатор открытого цикла
         private bool subString = false;                                         // Флаг для разбора условий
         public TranslationTable source;                                         // Исходный класс для разбора
@@ -16,14 +16,14 @@ namespace Interpreter
         /// <summary>
         /// Cловарь приоритетов операций.
         /// </summary>
-        private readonly Dictionary<TranslationToken, int> _priorityTable 
+        private readonly Dictionary<TranslationToken, int> _priorityTable
             = new Dictionary<TranslationToken, int>();
 
         public Queue<LexicalToken> output;                                  // Результат преобразования в инверсную запись
         private int priority = 0;                                               // Текущий приоритет операций
         public string out_log;                                                  // Лог для ошибок
         public TranslationTable regroupedTable = new TranslationTable();        // Класс для удаления ненужной информации из исходного класса
-/*------------------------------------------------------------------------------------------------------------------------------------------*/
+                                                                                /*------------------------------------------------------------------------------------------------------------------------------------------*/
         public void regroup()                                                   // Функция для удаления ненужной информации 
                                                                                 //из исходного класса
         {
@@ -32,23 +32,25 @@ namespace Interpreter
             {
                 regroupedTable.Buffer = source.TranslationList.Dequeue();       // Извлекаем объект из класса-источника в буфер
                 if (flag && (regroupedTable.Buffer.Token == TranslationToken.LeftBrace))               // Наличие флага и "{" говорит о необходимости 
-                                                                                //пропустить имя программы и добавить "{"
+                                                                                                       //пропустить имя программы и добавить "{"
                 {
                     regroupedTable.Put();
                     flag = false;
                     continue;
                 }
-                switch(regroupedTable.Buffer.Token)                             // Если поле "Token" соответствует одному из
-                                                                                //заданных - их необходимо пропустить
+                switch (regroupedTable.Buffer.Token)                             // Если поле "Token" соответствует одному из
+                                                                                 //заданных - их необходимо пропустить
                 {
-                    case TranslationToken.BooleanDataType: case TranslationToken.IntDataType: case TranslationToken.Comma:
+                    case TranslationToken.BooleanDataType:
+                    case TranslationToken.IntDataType:
+                    case TranslationToken.Comma:
                         flag = true;
                         regroupedTable.Buffer.Clear();
                         continue;
-                    default: break; 
+                    default: break;
                 }
                 if (regroupedTable.Buffer.Token == TranslationToken.Semicolon)                         // Наличие ";" говорит о необходимости завершить
-                                                                                //пропуск строки
+                                                                                                       //пропуск строки
                 {
                     if (!flag)
                         regroupedTable.Put();
@@ -67,14 +69,15 @@ namespace Interpreter
             HashInit();
             output = new Queue<LexicalToken>();                             // Инициализация переменной для результата
             Buffer.Clear();
-            while(regroupedTable.TranslationList.Count > 0)
+            while (regroupedTable.TranslationList.Count > 0)
             {
                 Buffer = regroupedTable.TranslationList.Dequeue();
                 casesOfTransactions();
             }
         }
-        void casesOfTransactions()                                              // Функция, обрабатывающая варианты действий
-                                                                                //в соответствии с пришедшим "Token"
+
+        private void casesOfTransactions()                                              // Функция, обрабатывающая варианты действий
+                                                                                        //в соответствии с пришедшим "Token"
         {
             switch (Buffer.Token)
             {
@@ -95,7 +98,7 @@ namespace Interpreter
                     Buffer = regroupedTable.TranslationList.Dequeue();
                     postfixString();
                     output.Enqueue(bufForIO);
-                    break; 
+                    break;
                 case TranslationToken.WhileKeyword:
                     postfixWhile();
                     break;
@@ -113,9 +116,10 @@ namespace Interpreter
                     break;
             }
         }
-        void postfixWhile()                                                     // Постфиксная запись оператора "WHILE"
+
+        private void postfixWhile()                                                     // Постфиксная запись оператора "WHILE"
         {
-            int loopIn = markCounter, loopOut = markCounter+1;
+            int loopIn = markCounter, loopOut = markCounter + 1;
             markCounter += 2;
             subString = true;
 
@@ -127,7 +131,7 @@ namespace Interpreter
             Buffer.Clear();
             Buffer = regroupedTable.TranslationList.Dequeue();
             postfixString();
-        
+
             // Добавляем условный переход на выход из цикла
             createTransition(loopOut, true);
             output.Enqueue(Buffer);
@@ -157,9 +161,10 @@ namespace Interpreter
             }
             currentOut = -1;
         }
-        void postfixIf()                                                        // Постфиксная запись оператора "IF"
+
+        private void postfixIf()                                                        // Постфиксная запись оператора "IF"
         {
-            int conditionOut = markCounter, elseOut = markCounter+1;
+            int conditionOut = markCounter, elseOut = markCounter + 1;
             markCounter += 2;
             subString = true;
             // Проверяем условие
@@ -223,17 +228,19 @@ namespace Interpreter
             }
 
         }
-        void createMark(int mark)                                               // Функция создания n-ой метки
+
+        private void createMark(int mark)                                               // Функция создания n-ой метки
         {
             Buffer.Clear();
             Buffer.Token = TranslationToken.GotoLabel;
-            Buffer.Value = "Label " + Convert.ToString(mark)+":";
+            Buffer.Value = "Label " + Convert.ToString(mark) + ":";
             Buffer.AttributeValue = "LABEL";
             Buffer.LexemeNumber = 100;
             Buffer.LineNumber = 0;
             Buffer.StringNumber = mark;
         }
-        void createTransition(int mark, bool conditional)                       // Функция создания условного/безусловного перехода к метке
+
+        private void createTransition(int mark, bool conditional)                       // Функция создания условного/безусловного перехода к метке
         {
             Buffer.Clear();
             Buffer.Token = TranslationToken.GotoTransition;
@@ -244,7 +251,8 @@ namespace Interpreter
             Buffer.StringNumber = mark;
             Buffer.isConditionalBranch = conditional;
         }
-        void postfixString()                                                    // Трансляция выражений
+
+        private void postfixString()                                                    // Трансляция выражений
         {
             Stack<LexicalToken> workStack = new Stack<LexicalToken>();
             priority = 0;
@@ -328,7 +336,7 @@ namespace Interpreter
         /// <summary>
         /// Инициализация словаря приоритетов.
         /// </summary>
-        void HashInit() 
+        private void HashInit()
         {
             _priorityTable.Add(TranslationToken.Semicolon, 0);
             _priorityTable.Add(TranslationToken.AssignOperation, 1);

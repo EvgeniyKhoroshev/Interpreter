@@ -1,11 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Interpreter
@@ -39,11 +32,11 @@ namespace Interpreter
                     MessageBox.Show("Число выходит за пределы разрядной сетки int");
                 }
             }
-            catch(FormatException)
+            catch (FormatException)
             {
-                    MessageBox.Show("Введите число.");
+                MessageBox.Show("Введите число.");
             }
-            
+
             if (flag)
                 this.Hide();
         }

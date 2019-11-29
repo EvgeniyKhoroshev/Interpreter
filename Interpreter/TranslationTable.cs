@@ -19,7 +19,7 @@ namespace Interpreter
         {
             if (Buffer.isIdentifier)
                 Identifiers.addRecord(Buffer);
-            else if(Buffer.Token == TranslationToken.Identifier)
+            else if (Buffer.Token == TranslationToken.Identifier)
                 Identifiers.isIdentifierExists(Buffer);
             TranslationList.Enqueue(Buffer);
             Buffer.Clear();
