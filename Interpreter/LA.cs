@@ -1,7 +1,7 @@
-﻿using System;
-using System.Linq;
+﻿using Interpreter.Translation;
+using System;
 using System.Collections;
-using Interpreter.Translation;
+using System.Linq;
 
 namespace Interpreter
 {
@@ -100,7 +100,7 @@ namespace Interpreter
             id_Table identifiers = new id_Table();
             State = 0;
             int j = 0;
-            string buf = "", lexBuf = "",atrBuf = ""; // Буфер текущей строки/лексемы
+            string buf = "", lexBuf = "", atrBuf = ""; // Буфер текущей строки/лексемы
             int RowCounter = 0, Switcher;
             stateLogLA = "";
             for (int i = 0; i < _code.Count(); ++i) // Перебор входных строк
@@ -253,7 +253,7 @@ namespace Interpreter
                             OutputTable.Put();
                             lexBuf = "";
                             State = 0;
-                            break; 
+                            break;
                         case 111:
                             OutputTable.Buffer.Value = "}";
                             OutputTable.Buffer.LexemeNumber = 11;
@@ -275,7 +275,7 @@ namespace Interpreter
                             OutputTable.Put();
                             lexBuf = "";
                             State = 0;
-                            break; 
+                            break;
                         case 113:
                             OutputTable.Buffer.Value = " ";
                             OutputTable.Buffer.LexemeNumber = 13;
@@ -313,8 +313,8 @@ namespace Interpreter
                             OutputTable.Buffer.AttributeValue = "OPERATION";
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
-                            lexBuf = ""; 
-                             State = 0;
+                            lexBuf = "";
+                            State = 0;
                             break;
                         case 116:
                             OutputTable.Buffer.Value = "-";
@@ -386,7 +386,7 @@ namespace Interpreter
                             OutputTable.Buffer.Value = ",";
                             OutputTable.Buffer.LexemeNumber = 22;
                             OutputTable.Buffer.StringNumber = i;
-                            OutputTable.Buffer.Token = TranslationToken.Comma; 
+                            OutputTable.Buffer.Token = TranslationToken.Comma;
                             OutputTable.Buffer.AttributeValue = "COMMA";
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
@@ -402,7 +402,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             if (flag)
                             {
-                                   atrBuf = "";
+                                atrBuf = "";
                                 flag = false;
                             }
                             OutputTable.Put();
@@ -416,8 +416,8 @@ namespace Interpreter
                             OutputTable.Buffer.Token = TranslationToken.LeftParentheses;
                             OutputTable.Buffer.AttributeValue = "LPAR_R";
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
-                            OutputTable.Put(); 
-                             lexBuf = "";
+                            OutputTable.Put();
+                            lexBuf = "";
                             State = 0;
                             break;
                         case 125:
@@ -435,7 +435,7 @@ namespace Interpreter
                             OutputTable.Buffer.Value = "INT";
                             OutputTable.Buffer.LexemeNumber = 26;
                             OutputTable.Buffer.StringNumber = i;
-                            OutputTable.Buffer.Token = TranslationToken.IntDataType; 
+                            OutputTable.Buffer.Token = TranslationToken.IntDataType;
                             OutputTable.Buffer.AttributeValue = "DIGIT";
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             if (!flag)

@@ -1,13 +1,13 @@
-﻿using System;
+﻿using Interpreter.Translation;
+using Interpreter.TranslationResult;
+using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using System.Collections;
-using Interpreter.TranslationResult;
-using Interpreter.Translation;
 
 namespace Interpreter
 {
-    class SA_LL1
+    internal class SA_LL1
     {
         private int[,] LLTable =
         { // S   F   d   B   X   W   D   I   T   E   C   f   i   o   c   ;   ,   =   +   -   *   /   %   (   )   $
@@ -55,17 +55,17 @@ namespace Interpreter
 {   0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  0,  999    },
 
 };
-        Stack WorkStack, OutputStack;
-        char[] LLColumn = {'X', 'B', 'd', 'R', 'I', 'W', 'i', 'e', 'C', 'E', 'c', ';', ',', '{',
+        private Stack WorkStack, OutputStack;
+        private char[] LLColumn = {'X', 'B', 'd', 'R', 'I', 'W', 'i', 'e', 'C', 'E', 'c', ';', ',', '{',
             '}', '(', ')', '=', '+', '-', '*', '/', '%','$' };
-        string[] LLRow ={"<P>", "<POp>", "<O>", "<a>", "<Op>", "<b>", "<LID>", "<c>", "<V>", "<d>",
+        private string[] LLRow ={"<P>", "<POp>", "<O>", "<a>", "<Op>", "<b>", "<LID>", "<c>", "<V>", "<d>",
             "<e>", "<f>", "<F>", "<g>", "<h>", "<PV>", "<o>", "<Cmp>", "X", "B", "d", "R", "I", "W",
             "i", "e", "C", "E", "c", ";", ",", "{", "}", "(", ")", "=", "+", "-", "*", "/", "%","$" };
         public string Log;
-        Queue<LexicalToken> input;
-        LexicalToken buffer = new LexicalToken();
+        private Queue<LexicalToken> input;
+        private LexicalToken buffer = new LexicalToken();
         public Queue<string> errLog;
-        Queue<LexicalToken> Tokens;
+        private Queue<LexicalToken> Tokens;
         public SA_LL1(Queue<LexicalToken> input)
         {
             errLog = new Queue<string>();
@@ -77,7 +77,7 @@ namespace Interpreter
             input = Tokens;
             buffer.Token = TranslationToken.EndOfProgram;
             input.Enqueue(buffer);
-            
+
             int c, r;
             WorkStack = new Stack();
             OutputStack = new Stack();
@@ -107,7 +107,8 @@ namespace Interpreter
             }
             return OutputStack;
         }
-        int GetRowByID(string Row)
+
+        private int GetRowByID(string Row)
         {
             if (LLRow.Contains(Row))
             {
@@ -117,7 +118,8 @@ namespace Interpreter
             }
             return -1;
         }
-        int GetColByID(char Col)
+
+        private int GetColByID(char Col)
         {
             if (!LLColumn.Contains(Col))
                 return -1;
@@ -127,7 +129,8 @@ namespace Interpreter
 
             return -1;
         }
-        void PutInStack(int caseOf)
+
+        private void PutInStack(int caseOf)
         {
             switch (caseOf)
             {
@@ -336,15 +339,15 @@ namespace Interpreter
                     Log += "Синтаксический разбор успешно завершен.\n";
                     return;
                 case 0:
-                    errLog.Enqueue("Строка ["+(buffer.StringNumber+1).ToString()+"]. Неожиданный символ "+buffer.Value+". \n");
+                    errLog.Enqueue("Строка [" + (buffer.StringNumber + 1).ToString() + "]. Неожиданный символ " + buffer.Value + ". \n");
                     PrintLog(0);
-                    if (input.Count>0)
+                    if (input.Count > 0)
                         buffer = input.Dequeue();
                     break;
             }
         }
 
-        void PrintLog(int Rule)
+        private void PrintLog(int Rule)
         {
             OutputStack.Push(WorkStack.Pop());
             Log += "M (" + OutputStack.Peek() + " , " + buffer.Token + ") = " + Convert.ToString(Rule) + "\n";

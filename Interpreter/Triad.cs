@@ -5,12 +5,12 @@ using System.Collections.Generic;
 
 namespace Interpreter
 {
-    class Triad : PostfixNotation
+    internal class Triad : PostfixNotation
     {
         private int triadCounter = 0;
-        LexicalToken Buffer = new LexicalToken();
+        private LexicalToken Buffer = new LexicalToken();
         public Triada BufferTriada;
-        Stack<LexicalToken> workStack;
+        private Stack<LexicalToken> workStack;
         public Triada[] ThreeAddressCode;
         private Queue<Triada> ThreeAddressCodeQueue;
         public void ProcessTriads()
@@ -26,7 +26,8 @@ namespace Interpreter
             }
             ThreeAddressCode = ThreeAddressCodeQueue.ToArray();
         }
-        void createTriad()
+
+        private void createTriad()
         {
             Buffer.Clear();
             Buffer.Value = Convert.ToString(triadCounter);

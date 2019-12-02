@@ -21,9 +21,11 @@ namespace Interpreter
             public string name;
             public int value;
         }
-        ID_int int_buff;
-        ID_bool bool_buff;
-        void clearBuff()
+
+        private ID_int int_buff;
+        private ID_bool bool_buff;
+
+        private void clearBuff()
         {
             int_buff.name = "";
             int_buff.numberInProgram = 0;

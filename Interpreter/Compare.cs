@@ -3,17 +3,15 @@ using Interpreter.TranslationResult;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Interpreter
 {
-    class Compare
+    internal class Compare
     {
         private Triada TriadaBuffer = new Triada();
         private LexicalToken Buffer = new LexicalToken();
         public int currentScore, problemCount;
-        double fullScore;
+        private double fullScore;
         public Compare()
         {
             InitializeBasic();
@@ -21,7 +19,8 @@ namespace Interpreter
             currentTask = tasks.Dequeue();
             currentProblem = problemsToOut.Dequeue();
         }
-        execute_all  input;
+
+        private execute_all input;
         public struct Problem
         {
             public int problemIndex;
@@ -29,7 +28,8 @@ namespace Interpreter
             public string problemText;
             public bool problemImage;
         }
-        struct Task
+
+        private struct Task
         {
             public int triadCount;
             public LexicalToken basicEcho;
@@ -39,24 +39,25 @@ namespace Interpreter
         }
         public Queue<Problem> problemsToOut = new Queue<Problem>();
         public Problem currentProblem;
-        Queue<Task> tasks = new Queue<Task>();
-        Task currentTask;
+        private Queue<Task> tasks = new Queue<Task>();
+        private Task currentTask;
         public string getResult(execute_all i)
         {
-            
+
             input = i;
             return compare();
         }
         public double getFinalResult()
         {
-            return fullScore/problemCount;
+            return fullScore / problemCount;
         }
         public void addCurrentResult()
         {
             fullScore += currentScore;
             currentScore = 0;
         }
-        string compare()
+
+        private string compare()
         {
             string result = "";
             int score = 0;
@@ -153,7 +154,7 @@ namespace Interpreter
             currentTask.basicID.Value = "A";
             currentTask.basicID.Token = TranslationToken.Identifier;
             currentTask.basicID.AttributeValue = "50";
-            currentTask.basicInput.AttributeValue = ""; 
+            currentTask.basicInput.AttributeValue = "";
             tasks.Enqueue(currentTask);
             currentProblem.problemImage = true;
             currentProblem.problemIndex = 1;
@@ -193,7 +194,8 @@ namespace Interpreter
             ClearTask();
 
         }
-        void ClearTask()
+
+        private void ClearTask()
         {
             Buffer.Clear();
             currentTask.basicEcho = Buffer;
@@ -208,14 +210,16 @@ namespace Interpreter
             currentProblem.problemIndex = 0;
             currentProblem.problem_annotation = "";
         }
-        int FindInput()
+
+        private int FindInput()
         {
             for (int i = 0; i < input.ThreeAddressCode.Count(); ++i)
                 if (input.ThreeAddressCode[i].Operation.Token == TranslationToken.InputKeyword)
                     return i;
             return -1;
         }
-        int FindEcho()
+
+        private int FindEcho()
         {
             for (int i = input.ThreeAddressCode.Count() - 1; i > 0; --i)
                 if (input.ThreeAddressCode[i].Operation.Token == TranslationToken.EchoKeyword)

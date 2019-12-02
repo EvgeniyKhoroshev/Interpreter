@@ -1,12 +1,5 @@
 ﻿using System;
 using System.IO;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 
@@ -14,7 +7,7 @@ namespace Interpreter
 {
     public partial class Info : Form
     {
-        bool flag = true;
+        private bool flag = true;
         public Info()
         {
             InitializeComponent();

@@ -1,21 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Interpreter
 {
     public partial class BS : Form
     {
-        System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BS));
+        private System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BS));
         public void setImageIndex(int index)
         {
-            tabControl2.SelectedIndex = index -1 ;
+            tabControl2.SelectedIndex = index - 1;
         }
         public BS()
         {
@@ -24,7 +17,7 @@ namespace Interpreter
 
         private void BS_Load(object sender, EventArgs e)
         {
-            
+
         }
 
         private void tabPage1_Click(object sender, EventArgs e)
