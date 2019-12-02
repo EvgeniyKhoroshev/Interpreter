@@ -1,20 +1,26 @@
 ﻿using Interpreter.Translation;
+using Newtonsoft.Json;
 using System;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace Interpreter
 {
     public partial class Form1 : Form
     {
+        private const string LexicalTablePath = "..\\..\\Resources\\Tables\\LexicalAnalyzerTable.txt";
         private execute_all execution;
         private Compare cmp;
-        private bool isDeveloper = true;
         private BS imageForm;
         private string basic_text = "Program\n{\n\n}";
         public Form1()
         {
             InitializeComponent();
+            WriteToFile();
+            ReadFromFile();
+
             cmp = new Compare();
             richTextBox1.Text = basic_text;
             taskTextBox.Text = cmp.currentProblem.problemText;
@@ -22,23 +28,13 @@ namespace Interpreter
 
 
             this.KeyPreview = true;
-            if (!isDeveloper)
-            {
-                tabControl1.TabPages.Remove(tabControl1.TabPages[0]);
-                tabControl1.TabPages.Remove(tabControl1.TabPages[1]);
-                tabControl1.TabPages.Remove(tabControl1.TabPages[tabControl1.TabPages.IndexOfKey("tabPage2")]);
-                taskTextBox.ReadOnly = true;
-                resultTextBox.ReadOnly = true;
-            }
-            else
-            {
-                tabControl1.Show();
-            }
-            if (!isDeveloper)
-            {
-                Info f = new Info();
-                f.ShowDialog();
-            }
+
+            tabControl1.Show();
+
+
+            Info f = new Info();
+            f.ShowDialog();
+
             tabControl1.Update();
         }
 
@@ -238,6 +234,30 @@ namespace Interpreter
                     richTextBox1.Text += Convert.ToString(sm[l]);
 
                 }
+            }
+        }
+
+        private void WriteToFile()
+        {
+            var serializer = new JsonSerializer();
+
+            using (StreamWriter file = new StreamWriter(LexicalTablePath, true))
+            {
+                var transferTable = LA.TransferTable;
+
+                serializer.Serialize(file, LA.TransferTable);
+            }
+        }
+
+        private void ReadFromFile()
+        {
+            var path = LexicalTablePath;
+            var json = new JsonSerializer();
+
+            using (StreamReader file = new StreamReader(path, true))
+            {
+                var transferTable = LA.TransferTable;
+                var table = json.Deserialize(file, typeof(int[,]));
             }
         }
     }

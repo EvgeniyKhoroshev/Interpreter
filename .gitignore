@@ -14,3 +14,11 @@
 *.*.cache
 *.cache
 .vs/
+.xml
+*.CopyComplete
+*.xml
+*.user
+*.p7s
+*.md
+*.png
+*.nupkg

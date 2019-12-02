@@ -6,24 +6,30 @@ using System.Collections.Generic;
 namespace Interpreter
 {
     internal class PostfixNotation
-    {
+    {        
+        /// <summary>
+        /// Таблица приоритетов операций.
+        /// </summary>
+        private Dictionary<TranslationToken, int> _priorityTable;
+
         private LexicalToken Buffer = new LexicalToken();
         private LexicalToken bufForIO;
         private int markCounter = 0, currentOut = -1;                           // Счетчик меток; индикатор открытого цикла
         private bool subString = false;                                         // Флаг для разбора условий
         public TranslationTable source;                                         // Исходный класс для разбора
 
-        /// <summary>
-        /// Cловарь приоритетов операций.
-        /// </summary>
-        private readonly Dictionary<TranslationToken, int> _priorityTable
-            = new Dictionary<TranslationToken, int>();
+        
 
         public Queue<LexicalToken> output;                                  // Результат преобразования в инверсную запись
         private int priority = 0;                                               // Текущий приоритет операций
         public string out_log;                                                  // Лог для ошибок
         public TranslationTable regroupedTable = new TranslationTable();        // Класс для удаления ненужной информации из исходного класса
-                                                                                /*------------------------------------------------------------------------------------------------------------------------------------------*/
+       
+        public PostfixNotation()
+        {
+            SetUpPriorityTable();
+        }
+        /*------------------------------------------------------------------------------------------------------------------------------------------*/
         public void regroup()                                                   // Функция для удаления ненужной информации 
                                                                                 //из исходного класса
         {
@@ -66,7 +72,6 @@ namespace Interpreter
         }
         public void postfixRecord()                                             // Функция преобразования в польскую инверсную нотацию
         {
-            HashInit();
             output = new Queue<LexicalToken>();                             // Инициализация переменной для результата
             Buffer.Clear();
             while (regroupedTable.TranslationList.Count > 0)
@@ -333,23 +338,23 @@ namespace Interpreter
                 output.Enqueue(Buffer);
         }
 
-        /// <summary>
-        /// Инициализация словаря приоритетов.
-        /// </summary>
-        private void HashInit()
+        private void SetUpPriorityTable()
         {
-            _priorityTable.Add(TranslationToken.Semicolon, 0);
-            _priorityTable.Add(TranslationToken.AssignOperation, 1);
-            _priorityTable.Add(TranslationToken.LeftParentheses, 2);
-            _priorityTable.Add(TranslationToken.RightParentheses, 2);
-            _priorityTable.Add(TranslationToken.LeftBrace, 2);
-            _priorityTable.Add(TranslationToken.RightBrace, 2);
-            _priorityTable.Add(TranslationToken.ComparsionOpearation, 3);
-            _priorityTable.Add(TranslationToken.PlusOperation, 4);
-            _priorityTable.Add(TranslationToken.MinusOperation, 4);
-            _priorityTable.Add(TranslationToken.RemainderOfTheDivisionOperation, 5);
-            _priorityTable.Add(TranslationToken.MultipleOperation, 6);
-            _priorityTable.Add(TranslationToken.DivisionOperation, 6);
+            _priorityTable = new Dictionary<TranslationToken, int>
+            {
+                { TranslationToken.Semicolon, 0 },
+                { TranslationToken.AssignOperation, 1 },
+                { TranslationToken.LeftParentheses, 2 },
+                { TranslationToken.RightParentheses, 2 },
+                { TranslationToken.LeftBrace, 2 },
+                { TranslationToken.RightBrace, 2 },
+                { TranslationToken.ComparsionOpearation, 3 },
+                { TranslationToken.PlusOperation, 4 },
+                { TranslationToken.MinusOperation, 4 },
+                { TranslationToken.RemainderOfTheDivisionOperation, 5 },
+                { TranslationToken.MultipleOperation, 6 },
+                { TranslationToken.DivisionOperation, 6 }
+            };
         }
     }
 }
