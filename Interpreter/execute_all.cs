@@ -35,6 +35,7 @@ namespace Interpreter
                 return;
             toSA();
             SyntaxAnalyser = new SA_LL1(toS.TranslationList);
+            var Lr1 = new SA_LR1();
             if (SyntaxAnalyser.errLog.Count > 0)
                 return;
             SyntaxAnalyser.Do();

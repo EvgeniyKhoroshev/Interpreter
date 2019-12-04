@@ -1,16 +1,14 @@
-﻿using Interpreter.Translation;
-using Newtonsoft.Json;
+﻿using Interpreter.Constants;
+using Interpreter.Extensions;
+using Interpreter.Translation;
 using System;
-using System.IO;
 using System.Linq;
 using System.Windows.Forms;
-using System.Xml.Serialization;
 
 namespace Interpreter
 {
     public partial class Form1 : Form
     {
-        private const string LexicalTablePath = "..\\..\\Resources\\Tables\\LexicalAnalyzerTable.txt";
         private execute_all execution;
         private Compare cmp;
         private BS imageForm;
@@ -18,8 +16,10 @@ namespace Interpreter
         public Form1()
         {
             InitializeComponent();
-            WriteToFile();
-            ReadFromFile();
+            //SA_LR1._LRTable.WriteToFile(PathConstants.LR1TablePath);
+            //SA_LR1._LRColumns.WriteToFile(PathConstants.LR1ColumnPath);
+            //SA_LL1.LLTableClass.LLColumn.WriteToFile(PathConstants.LL1ColumnPath);
+            //ReadFromFile();
 
             cmp = new Compare();
             richTextBox1.Text = basic_text;
@@ -234,30 +234,6 @@ namespace Interpreter
                     richTextBox1.Text += Convert.ToString(sm[l]);
 
                 }
-            }
-        }
-
-        private void WriteToFile()
-        {
-            var serializer = new JsonSerializer();
-
-            using (StreamWriter file = new StreamWriter(LexicalTablePath, true))
-            {
-                var transferTable = LA.TransferTable;
-
-                serializer.Serialize(file, LA.TransferTable);
-            }
-        }
-
-        private void ReadFromFile()
-        {
-            var path = LexicalTablePath;
-            var json = new JsonSerializer();
-
-            using (StreamReader file = new StreamReader(path, true))
-            {
-                var transferTable = LA.TransferTable;
-                var table = json.Deserialize(file, typeof(int[,]));
             }
         }
     }

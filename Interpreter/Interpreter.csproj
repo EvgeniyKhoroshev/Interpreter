@@ -77,8 +77,10 @@
       <DependentUpon>BS.cs</DependentUpon>
     </Compile>
     <Compile Include="Compare.cs" />
+    <Compile Include="Constants\PathConstants.cs" />
     <Compile Include="execute_all.cs" />
     <Compile Include="Execution.cs" />
+    <Compile Include="Extensions\FileExtensions.cs" />
     <Compile Include="Form1.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,9 +165,7 @@
   <ItemGroup>
     <None Include="Resources\Image3.jpg" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\Tables\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
