@@ -40,7 +40,7 @@ namespace Interpreter
                 if (flag && (regroupedTable.Buffer.Token == TranslationToken.LeftBrace))               // Наличие флага и "{" говорит о необходимости 
                                                                                                        //пропустить имя программы и добавить "{"
                 {
-                    regroupedTable.Put();
+                    regroupedTable.InsertTranslationResult();
                     flag = false;
                     continue;
                 }
@@ -48,7 +48,7 @@ namespace Interpreter
                                                                                  //заданных - их необходимо пропустить
                 {
                     case TranslationToken.BooleanDataType:
-                    case TranslationToken.IntDataType:
+                    case TranslationToken.Digit:
                     case TranslationToken.Comma:
                         flag = true;
                         regroupedTable.Buffer.Clear();
@@ -59,7 +59,7 @@ namespace Interpreter
                                                                                                        //пропуск строки
                 {
                     if (!flag)
-                        regroupedTable.Put();
+                        regroupedTable.InsertTranslationResult();
                     flag = false;
                     regroupedTable.Buffer.Clear();
                     continue;
@@ -67,7 +67,7 @@ namespace Interpreter
                 if (!flag && regroupedTable.Buffer.Value != " ")                // Отсутствие флага пропуска говорит о том,
                                                                                 //что текущий обьект можно поместить в результат,
                                                                                 //если поле "Token" не равно " "
-                    regroupedTable.Put();
+                    regroupedTable.InsertTranslationResult();
             }
         }
         public void postfixRecord()                                             // Функция преобразования в польскую инверсную нотацию
@@ -240,8 +240,7 @@ namespace Interpreter
             Buffer.Token = TranslationToken.GotoLabel;
             Buffer.Value = "Label " + Convert.ToString(mark) + ":";
             Buffer.AttributeValue = "LABEL";
-            Buffer.LexemeNumber = 100;
-            Buffer.LineNumber = 0;
+            Buffer.CurrentColumnIndex = 0;
             Buffer.StringNumber = mark;
         }
 
@@ -251,8 +250,7 @@ namespace Interpreter
             Buffer.Token = TranslationToken.GotoTransition;
             Buffer.Value = "goto " + Convert.ToString(mark);
             Buffer.AttributeValue = "GOTO";
-            Buffer.LexemeNumber = 200;
-            Buffer.LineNumber = 0;
+            Buffer.CurrentColumnIndex = 0;
             Buffer.StringNumber = mark;
             Buffer.isConditionalBranch = conditional;
         }

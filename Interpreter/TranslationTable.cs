@@ -15,14 +15,13 @@ namespace Interpreter
         /// Структура токена, который получился в результате разбора.
         /// </summary>
         public LexicalToken Buffer; // Буфер ввода/вывода таблицы
-        public void Put()
+        public void InsertTranslationResult()
         {
             if (Buffer.isIdentifier)
                 Identifiers.addRecord(Buffer);
             else if (Buffer.Token == TranslationToken.Identifier)
                 Identifiers.isIdentifierExists(Buffer);
             TranslationList.Enqueue(Buffer);
-            Buffer.Clear();
         }
     }
 }

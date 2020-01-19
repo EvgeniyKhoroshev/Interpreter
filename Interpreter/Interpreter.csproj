@@ -100,13 +100,14 @@
     <Compile Include="IOform.Designer.cs">
       <DependentUpon>IOform.cs</DependentUpon>
     </Compile>
-    <Compile Include="LA.cs" />
+    <Compile Include="LexicalAnalyzer.cs" />
     <Compile Include="PostfixNotation.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SA_LL1.cs" />
     <Compile Include="SA_LR1.cs" />
     <Compile Include="TranslationResult\DataType.cs" />
+    <Compile Include="TranslationResult\LexicalAnalyzerTranslationResult.cs" />
     <Compile Include="TranslationResult\Triada.cs" />
     <Compile Include="TranslationResult\Variables\ValueVariable.cs" />
     <Compile Include="TranslationTable.cs" />
@@ -172,7 +173,7 @@
     <Content Include="Resources\Tables\LL1\RowKeys.txt" />
     <Content Include="Resources\Tables\LL1\Table.txt" />
     <Content Include="Resources\Tables\LR1\ColumnKeys.txt" />
-    <Content Include="Resources\Tables\LR1\RowKeys.txt" />
+    <Content Include="Resources\Tables\LR1\Table.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

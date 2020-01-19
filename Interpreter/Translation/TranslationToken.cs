@@ -23,7 +23,7 @@
         /// <summary>
         /// d.
         /// </summary>
-        IntDataType = 3,
+        Digit = 3,
 
         /// <summary>
         /// R.

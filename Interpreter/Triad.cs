@@ -32,7 +32,7 @@ namespace Interpreter
             Buffer.Clear();
             Buffer.Value = Convert.ToString(triadCounter);
             Buffer.Token = TranslationToken.Triada;
-            Buffer.LineNumber = triadCounter;
+            Buffer.CurrentColumnIndex = triadCounter;
         }
         private void ActionCase()
         {

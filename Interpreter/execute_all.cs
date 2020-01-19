@@ -31,7 +31,7 @@ namespace Interpreter
         private void Init()
         {
             some = LexicalAnalyser.TranslateCode();
-            if (LexicalAnalyser.ErrorListLA.Count > 0)
+            if (LexicalAnalyser._errors.Count > 0)
                 return;
             toSA();
             SyntaxAnalyser = new SA_LL1(toS.TranslationList);

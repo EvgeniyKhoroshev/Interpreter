@@ -81,7 +81,7 @@ namespace Interpreter
                         return;
                     }
                     currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
-                    currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LineNumber;
+                    currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                     currentInt.value = Convert.ToInt32(Ibuf.textBox1.Text);
                     source.Identifiers.intTable[currentInt.name] = currentInt;
                     pointer++;
@@ -108,7 +108,7 @@ namespace Interpreter
                         }
                     else
                     {
-                        if (findLabel(ThreeAddressCode[pointer].Operation.LineNumber) != -1)
+                        if (findLabel(ThreeAddressCode[pointer].Operation.LexemeStartIndex) != -1)
                         {
                             triadResult[pointer] = ThreeAddressCode[pointer].Operation.Value;
                             pointer = findLabel(ThreeAddressCode[pointer].Operation.StringNumber);
@@ -312,19 +312,19 @@ namespace Interpreter
                     return GetCurrentConst(input);
                 case TranslationToken.Triada:
                     {
-                        if (CompareBool(triadResult[input.LineNumber], true))
+                        if (CompareBool(triadResult[input.LexemeStartIndex], true))
                         {
                             currentBool.value = true;
-                            currentBool.numberInProgram = input.LineNumber;
+                            currentBool.numberInProgram = input.LexemeStartIndex;
                             return false;
                         }
-                        if (CompareBool(triadResult[input.LineNumber], false))
+                        if (CompareBool(triadResult[input.LexemeStartIndex], false))
                         {
                             currentBool.value = false;
-                            currentBool.numberInProgram = input.LineNumber;
+                            currentBool.numberInProgram = input.LexemeStartIndex;
                             return false;
                         }
-                        currentInt.value = Convert.ToInt32(triadResult[input.LineNumber]);
+                        currentInt.value = Convert.ToInt32(triadResult[input.LexemeStartIndex]);
                         return true;
                     }
             }
@@ -336,17 +336,17 @@ namespace Interpreter
             if (CompareBool(input.Value, true))
             {
                 currentBool.value = true;
-                currentBool.numberInProgram = input.LineNumber;
+                currentBool.numberInProgram = input.LexemeStartIndex;
                 return false;
             }
             if (CompareBool(input.Value, false))
             {
                 currentBool.value = false;
-                currentBool.numberInProgram = input.LineNumber;
+                currentBool.numberInProgram = input.LexemeStartIndex;
                 return false;
             }
             currentInt.value = Convert.ToInt32(input.Value);
-            currentBool.numberInProgram = input.LineNumber;
+            currentBool.numberInProgram = input.LexemeStartIndex;
             return true;
         }
 
@@ -354,14 +354,14 @@ namespace Interpreter
         {
             currentInt.name = input.Value;
             currentInt.value = source.Identifiers.intTable[currentInt.name].value;
-            currentInt.numberInProgram = input.LineNumber;
+            currentInt.numberInProgram = input.LexemeStartIndex;
         }
 
         private void GetCurrentBoolByID(LexicalToken input)
         {
             currentBool.name = input.Value;
             currentBool.value = source.Identifiers.boolTable[currentBool.name].value;
-            currentBool.numberInProgram = input.LineNumber;
+            currentBool.numberInProgram = input.LexemeStartIndex;
         }
 
         private void ClearBuff()
@@ -391,7 +391,7 @@ namespace Interpreter
                             }
                             currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
                             currentInt.value = Convert.ToInt32(ThreeAddressCode[pointer].SecondOperand.Value);
-                            currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LineNumber;
+                            currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                             source.Identifiers.intTable[currentInt.name] = currentInt;
                             ClearBuff();
                             break;
@@ -406,18 +406,18 @@ namespace Interpreter
                             }
                             currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
                             currentInt.value = source.Identifiers.intTable[ThreeAddressCode[pointer].SecondOperand.Value].value;
-                            currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LineNumber;
+                            currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                             source.Identifiers.intTable[currentInt.name] = currentInt;
                             ClearBuff();
                             break;
                         case TranslationToken.Triada:
-                            if (triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] != "" &&
-                                triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] != "TRUE" &&
-                                triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] != "FALSE")
+                            if (triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex] != "" &&
+                                triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex] != "TRUE" &&
+                                triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex] != "FALSE")
                             {
                                 currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
-                                currentInt.value = Convert.ToInt32(triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber]);
-                                currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LineNumber;
+                                currentInt.value = Convert.ToInt32(triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex]);
+                                currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                                 source.Identifiers.intTable[currentInt.name] = currentInt;
                                 ClearBuff();
                             }
@@ -446,7 +446,7 @@ namespace Interpreter
                             }
                             currentBool.name = ThreeAddressCode[pointer].FirstOperand.Value;
                             currentBool.value = Convert.ToBoolean(ThreeAddressCode[pointer].SecondOperand.Value);
-                            currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LineNumber;
+                            currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                             source.Identifiers.boolTable[currentBool.name] = currentBool;
                             ClearBuff();
                             break;
@@ -460,17 +460,17 @@ namespace Interpreter
                             }
                             currentBool.name = ThreeAddressCode[pointer].FirstOperand.Value;
                             currentBool.value = source.Identifiers.boolTable[ThreeAddressCode[pointer].SecondOperand.Value].value;
-                            currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LineNumber;
+                            currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                             source.Identifiers.boolTable[currentBool.name] = currentBool;
                             ClearBuff();
                             break;
                         case TranslationToken.Triada:
-                            if (triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] == "TRUE" ||
-                                triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] == "FALSE")
+                            if (triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex] == "TRUE" ||
+                                triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex] == "FALSE")
                             {
                                 currentBool.name = ThreeAddressCode[pointer].FirstOperand.Value;
-                                currentBool.value = Convert.ToBoolean(triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber]);
-                                currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LineNumber;
+                                currentBool.value = Convert.ToBoolean(triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex]);
+                                currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                                 source.Identifiers.boolTable[currentBool.name] = currentBool;
                                 ClearBuff();
                             }
@@ -478,7 +478,7 @@ namespace Interpreter
                             {
                                 outFlag = true;
                                 error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() +
-                                    "] невозможно присвоить переменной типа 'BOOL' значение '" + triadResult[ThreeAddressCode[pointer].SecondOperand.LineNumber] + "'";
+                                    "] невозможно присвоить переменной типа 'BOOL' значение '" + triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex] + "'";
                                 return;
                             }
                             break;

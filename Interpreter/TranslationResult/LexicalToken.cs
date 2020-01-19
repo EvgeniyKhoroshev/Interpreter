@@ -8,19 +8,14 @@ namespace Interpreter.TranslationResult
     public class LexicalToken
     {
         /// <summary>
-        /// Номер строки.
+        /// Индекс начала лексемы.
         /// </summary>
-        public int LineNumber;
+        public int LexemeStartIndex { get => CurrentColumnIndex - Value.Length; }
 
         /// <summary>
         /// Значение лексемы.
         /// </summary>
         public string Value;
-
-        /// <summary>
-        /// Номер лексемы.
-        /// </summary>
-        public int LexemeNumber { get; set; }
 
         /// <summary>
         /// Токен.
@@ -29,7 +24,17 @@ namespace Interpreter.TranslationResult
 
 
         public string AttributeValue;
+
+        /// <summary>
+        /// Номер строки.
+        /// </summary>
         public int StringNumber;
+
+        /// <summary>
+        /// Текущий номер столбца.
+        /// </summary>
+        public int CurrentColumnIndex;
+
         public bool isIdentifier;
         public bool isConditionalBranch;
     }
@@ -38,10 +43,9 @@ namespace Interpreter.TranslationResult
     {
         public static void Clear(this LexicalToken source)
         {
-            source.LineNumber = 0;
+            source.CurrentColumnIndex = 0;
             source.Token = TranslationToken.Space;
             source.Value = "";
-            source.LexemeNumber = 0;
             source.StringNumber = 0;
             source.AttributeValue = "";
             source.isIdentifier = false;

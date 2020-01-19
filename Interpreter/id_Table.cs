@@ -45,7 +45,7 @@ namespace Interpreter
                 {
                     if (input.AttributeValue == "BOOL")
                     {
-                        bool_buff.numberInProgram = input.LineNumber;
+                        bool_buff.numberInProgram = input.LexemeStartIndex;
                         bool_buff.name = nameForBuf;
                         bool_buff.value = false;
                         boolTable.Add(nameForBuf, bool_buff);
@@ -54,7 +54,7 @@ namespace Interpreter
                     }
                     if (input.AttributeValue == "INT")
                     {
-                        int_buff.numberInProgram = input.LineNumber;
+                        int_buff.numberInProgram = input.LexemeStartIndex;
                         int_buff.name = nameForBuf;
                         int_buff.value = 0;
                         intTable.Add(nameForBuf, int_buff);
@@ -64,7 +64,7 @@ namespace Interpreter
                 }
                 else
                 {
-                    errors.Enqueue("Строка [" + (input.StringNumber + 1).ToString() + "][" + input.LineNumber + "] '" + input.Value + "' Идентификатор с таким именем уже существует.\n");
+                    errors.Enqueue("Строка [" + (input.StringNumber + 1).ToString() + "][" + input.LexemeStartIndex + "] '" + input.Value + "' Идентификатор с таким именем уже существует.\n");
                     return false;
                 }
             }
@@ -75,7 +75,7 @@ namespace Interpreter
             string nameForBuf = input.Value;
             if (!intTable.ContainsKey(nameForBuf) && !boolTable.ContainsKey(nameForBuf))
             {
-                errors.Enqueue("[" + (input.StringNumber + 1).ToString() + "][" + input.LineNumber + "] '" + input.Value + "' Переменная не была обьявлена в программе.\n");
+                errors.Enqueue("[" + (input.StringNumber + 1).ToString() + "][" + input.LexemeStartIndex + "] '" + input.Value + "' Переменная не была обьявлена в программе.\n");
                 return false;
             }
             return true;
