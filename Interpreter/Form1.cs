@@ -27,7 +27,7 @@ namespace Interpreter
             execution = new execute_all();
 
 
-            this.KeyPreview = true;
+            KeyPreview = true;
 
             tabControl1.Show();
 

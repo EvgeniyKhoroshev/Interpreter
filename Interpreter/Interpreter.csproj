@@ -165,7 +165,14 @@
   <ItemGroup>
     <None Include="Resources\Image3.jpg" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Resources\Tables\LexicalAnalyzerTable.txt" />
+    <Content Include="Resources\Tables\LLTables\LL1Column.txt" />
+    <Content Include="Resources\Tables\LLTables\LL1Row.txt" />
+    <Content Include="Resources\Tables\LLTables\LL1Table.txt" />
+    <Content Include="Resources\Tables\LRTables\LR1Column.txt" />
+    <Content Include="Resources\Tables\LRTables\LR1Table.txt" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

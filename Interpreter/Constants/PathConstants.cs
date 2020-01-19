@@ -12,6 +12,6 @@
         public static string LR1TablePath = $"{TablesPath}\\LRTables\\LR1Table.txt";
 
 
-        private const string TablesPath = "..\\..\\..\\Tables\\";
+        private const string TablesPath = "..\\..\\Resources\\Tables\\";
     }
 }
