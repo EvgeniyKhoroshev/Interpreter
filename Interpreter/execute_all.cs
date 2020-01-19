@@ -8,7 +8,7 @@ namespace Interpreter
     {
         public string toOut;
         public int tokens_count = 0;
-        public LA LexicalAnalyser;
+        public LexicalAnalyzer LexicalAnalyser;
         public SA_LL1 SyntaxAnalyser;
         private TranslationTable some, toS;
         public execute_all()
@@ -18,7 +18,7 @@ namespace Interpreter
         public void solve(string[] inputCode)
         {
             this.source = new TranslationTable();
-            LexicalAnalyser = new LA(inputCode);
+            LexicalAnalyser = new LexicalAnalyzer(inputCode);
             toS = new TranslationTable();
             some = new TranslationTable();
             try

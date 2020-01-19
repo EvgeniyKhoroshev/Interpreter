@@ -166,12 +166,13 @@
     <None Include="Resources\Image3.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\Tables\LexicalAnalyzerTable.txt" />
-    <Content Include="Resources\Tables\LLTables\LL1Column.txt" />
-    <Content Include="Resources\Tables\LLTables\LL1Row.txt" />
-    <Content Include="Resources\Tables\LLTables\LL1Table.txt" />
-    <Content Include="Resources\Tables\LRTables\LR1Column.txt" />
-    <Content Include="Resources\Tables\LRTables\LR1Table.txt" />
+    <Content Include="Resources\Tables\LexicalAnalyzer\RowKeys.txt" />
+    <Content Include="Resources\Tables\LexicalAnalyzer\Table.txt" />
+    <Content Include="Resources\Tables\LL1\ColumnKeys.txt" />
+    <Content Include="Resources\Tables\LL1\RowKeys.txt" />
+    <Content Include="Resources\Tables\LL1\Table.txt" />
+    <Content Include="Resources\Tables\LR1\ColumnKeys.txt" />
+    <Content Include="Resources\Tables\LR1\RowKeys.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

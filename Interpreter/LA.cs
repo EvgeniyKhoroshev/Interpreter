@@ -7,29 +7,34 @@ using Interpreter.Constants;
 
 namespace Interpreter
 {
-    public class LA
+    /// <summary>
+    /// Class which main responsibility is translation of code to lexemes list. 
+    /// </summary>
+    public class LexicalAnalyzer
     {
+        /// <summary>
+        /// Table consists of each lexeme state provided by _rowKeys.
+        /// </summary>
+        private readonly int[,] _translationTable;
 
-        public static int[,] TransferTable;
-        // Вектор терминальных символов
-        public char[] Rows =
-            {
-                                'B',    'O',    'L',    'I',    'R',    'E',
-                                'A',    'K',    'T',    'U',    'F',    'S',
-                                'C',    'H',    'S',    'W',    'N',    'P',
-                                '0',    '0',    '+',    '-',    '*',    '=',
-                                '<',    ':',    '(',    ')',    ';',    ',',
-                                '/',    '%',    ' ',    '{',    '}' ,   '$'
+        /// <summary>
+        /// Main symbols of the provided language. 
+        /// Each symbol has a number of states described in _translationTable. 
+        /// </summary>
+        private readonly char[] _rowKeys;
 
-            };
-
+        /// <summary>
+        /// Code of the program to analyze.
+        /// </summary>
         private readonly string[] _code;
-        public LA(string[] input)
+        public LexicalAnalyzer(string[] input)
         {
             _code = input;
-            TransferTable = (int[,])FileExtensions.ReadFromFile(typeof(int[,]), PathConstants.LexicalTablePath);
+            _translationTable = (int[,])FileExtensions.ReadFromFile(typeof(int[,]), PathConstants.LexicalTablePath);
+            _rowKeys = (char[])FileExtensions.ReadFromFile(typeof(char[]), PathConstants.LexicalAnalyzerRows);
         }
-        private int State; //Переменная состояния
+
+        private int _state; //Переменная состояния
         private int ErrorCounter;
         private bool flag = true;
         public string stateLogLA;
@@ -44,15 +49,15 @@ namespace Interpreter
             if (char.IsLetter(id))
             {
                 buf = char.ToUpper(id);
-                if (!Rows.Contains(buf))
+                if (!_rowKeys.Contains(buf))
                     return 18;
             }
 
 
             buf = char.ToUpper(id);
-            for (int i = 0; i < Rows.Count(); ++i)
+            for (int i = 0; i < _rowKeys.Count(); ++i)
             {
-                if (Rows[i] == buf)
+                if (_rowKeys[i] == buf)
                     return i;
             }
             return -1;
@@ -62,7 +67,7 @@ namespace Interpreter
             stateLogLA = "Лог состояний: \n";
             TranslationTable OutputTable = new TranslationTable(); //Выходная таблица трансляции;
             id_Table identifiers = new id_Table();
-            State = 0;
+            _state = 0;
             int j = 0;
             string buf = "", lexBuf = "", atrBuf = ""; // Буфер текущей строки/лексемы
             int RowCounter = 0, Switcher;
@@ -76,17 +81,17 @@ namespace Interpreter
                     if ((RowCounter = GetRowByID(buf[j])) == -1)
                     {
                         ErrorListLA.Enqueue("Неизвестный символ. Строка №" + Convert.ToString(i + 1) + " символ № [" + Convert.ToString(j + 1) + "] :" + buf[j]);
-                        State = 0;
+                        _state = 0;
                         ++j;
                         continue;
                     }
-                    Switcher = TransferTable[RowCounter, State];
+                    Switcher = _translationTable[RowCounter, _state];
                     stateLogLA += Convert.ToString(Switcher) + ' ';
                     if (Switcher == 0)
                     {
                         ErrorListLA.Enqueue("Не удается обнаружить лексему в строке №" + Convert.ToString(i + 1) + " символ № [" + Convert.ToString(j + 1) + "] :" + buf[j]);
                         ++ErrorCounter;
-                        State = 0;
+                        _state = 0;
                         ++j;
                         continue;
                     }
@@ -96,7 +101,7 @@ namespace Interpreter
                             lexBuf += char.ToUpper(buf[j]);
                         else
                             lexBuf += buf[j];
-                        State = TransferTable[RowCounter, State];
+                        _state = _translationTable[RowCounter, _state];
                         ++j;
                         continue;
                     }
@@ -116,7 +121,7 @@ namespace Interpreter
                             }
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 102:
                             OutputTable.Buffer.Value = "BREAK";
@@ -127,7 +132,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 103:
                             OutputTable.Buffer.Value = "TRUE";
@@ -138,7 +143,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 104:
                             OutputTable.Buffer.Value = "FALSE";
@@ -149,7 +154,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 105:
                             OutputTable.Buffer.Value = "WHILE";
@@ -160,7 +165,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 106:
                             OutputTable.Buffer.Value = "INPUT";
@@ -171,7 +176,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 107:
                             OutputTable.Buffer.Value = "IF";
@@ -182,7 +187,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 108:
                             OutputTable.Buffer.Value = "ECHO";
@@ -193,7 +198,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 109:
                             OutputTable.Buffer.Value = "ELSE";
@@ -204,7 +209,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 110:
                             OutputTable.Buffer.Value = "{";
@@ -216,7 +221,7 @@ namespace Interpreter
                             flag = false;
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 111:
                             OutputTable.Buffer.Value = "}";
@@ -227,7 +232,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 112:
                             OutputTable.Buffer.Value = lexBuf;
@@ -238,7 +243,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 113:
                             OutputTable.Buffer.Value = " ";
@@ -249,7 +254,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 114:
                             OutputTable.Buffer.Value = lexBuf;
@@ -267,7 +272,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 115:
                             OutputTable.Buffer.Value = "+";
@@ -278,7 +283,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 116:
                             OutputTable.Buffer.Value = "-";
@@ -289,7 +294,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 117:
                             OutputTable.Buffer.Value = "=";
@@ -300,7 +305,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 118:
                             OutputTable.Buffer.Value = lexBuf;
@@ -311,7 +316,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 119:
                             OutputTable.Buffer.Value = "/";
@@ -322,7 +327,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 120:
                             OutputTable.Buffer.Value = "*";
@@ -333,7 +338,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 121:
                             OutputTable.Buffer.Value = "%";
@@ -344,7 +349,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 122:
                             OutputTable.Buffer.Value = ",";
@@ -355,7 +360,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 123:
                             OutputTable.Buffer.Value = ";";
@@ -371,7 +376,7 @@ namespace Interpreter
                             }
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 124:
                             OutputTable.Buffer.Value = "(";
@@ -382,7 +387,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 125:
                             OutputTable.Buffer.Value = ")";
@@ -393,7 +398,7 @@ namespace Interpreter
                             OutputTable.Buffer.LineNumber = j - OutputTable.Buffer.Value.Count();
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                         case 126:
                             OutputTable.Buffer.Value = "INT";
@@ -409,7 +414,7 @@ namespace Interpreter
                             }
                             OutputTable.Put();
                             lexBuf = "";
-                            State = 0;
+                            _state = 0;
                             break;
                     }
                 }

@@ -16,10 +16,6 @@ namespace Interpreter
         public Form1()
         {
             InitializeComponent();
-            //SA_LR1._LRTable.WriteToFile(PathConstants.LR1TablePath);
-            //SA_LR1._LRColumns.WriteToFile(PathConstants.LR1ColumnPath);
-            //SA_LL1.LLTableClass.LLColumn.WriteToFile(PathConstants.LL1ColumnPath);
-            //ReadFromFile();
 
             cmp = new Compare();
             richTextBox1.Text = basic_text;
