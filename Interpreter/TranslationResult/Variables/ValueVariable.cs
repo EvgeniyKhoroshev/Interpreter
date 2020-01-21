@@ -3,9 +3,9 @@
     /// <summary>
     /// Абстрактный класс для хранение информации о переменных.
     /// </summary>
-    /// <typeparam name="TDataType">Тип данных.</typeparam>
-    public class ValueVariable<TDataType>
-        where TDataType : struct
+    /// <typeparam name="TValueType">Тип данных.</typeparam>
+    public abstract class Variable<TValueType>
+        where TValueType : struct
     {
         /// <summary>
         /// Тип данных.
@@ -15,7 +15,7 @@
         /// <summary>
         /// Значение переменной.
         /// </summary>
-        public virtual TDataType Value { get; set; }
+        public virtual TValueType Value { get; set; }
 
         /// <summary>
         /// Название переменной.

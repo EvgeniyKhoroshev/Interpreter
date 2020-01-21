@@ -30,9 +30,9 @@ namespace Interpreter
         private readonly string[] _code;
 
         /// <summary>
-        /// 
+        /// Lexical analysis state log.
         /// </summary>
-        public string StateLog = string.Empty;
+        public List<string> StateLog = new List<string>();
 
         /// <summary>
         /// Pattern of unknown symbol error text.
@@ -42,7 +42,13 @@ namespace Interpreter
         /// <summary>
         /// Could not find any lexeme error text pattern.
         /// </summary>
-        private readonly string _couldNotFindAnyLexemePattern = "Could not find any lexeme. String №{0}, символ № [{1}] = {2}.";
+        private readonly string _couldNotFindAnyLexemePattern = "Could not find any lexeme. " +
+                                                                "String №{0}, символ № [{1}] = {2}.";
+
+        /// <summary>
+        /// Pattern to print lexical analysis log.
+        /// </summary>
+        private readonly string _stateLogMessagePattern = "Value = {0} State = {1} \n";
 
         /// <summary>
         /// The value of state which defines that the symbol 
@@ -90,8 +96,7 @@ namespace Interpreter
             for (int i = 0; i < _code.Count(); ++i) // Перебор входных строк
             {
                 var currentLine = _code[i];
-                var currentEntryInfo = new CurrentEntryInfo 
-                { StringNumber = i, SymbolNumber = 0, LexemeBuffer = string.Empty };
+                var currentEntryInfo = new CurrentEntryInfo();
 
                 while (currentLine.Length > currentEntryInfo.SymbolNumber) // Перебор символов текущей строки
                 {
@@ -99,20 +104,21 @@ namespace Interpreter
 
                     if (currentKey == UnknownSybolStateValue)
                     {
+                        AddUnknownSybolStateError(i, currentLine, currentEntryInfo);
 
-                        _errors.Add(string.Format(_unknownSymbolErrorPattern, i, currentEntryInfo.SymbolNumber, currentLine[currentEntryInfo.SymbolNumber]));
                         currentEntryInfo.CurrentState = 0;
                         ++currentEntryInfo.SymbolNumber;
 
                         continue;
                     }
 
-                    currentEntryInfo.CurrentState = _translationTable[currentKey, currentEntryInfo.CurrentState];
-                    StateLog += $"Value = {currentLine[currentEntryInfo.SymbolNumber]} " +
-                                $"State = { currentEntryInfo.CurrentState} \n";
+                    SetCurrentState(currentEntryInfo, currentKey);
+                    AddStateLogMessage(currentLine, currentEntryInfo);
+
                     if (currentEntryInfo.CurrentState == 0)
                     {
-                        _errors.Add(string.Format(_couldNotFindAnyLexemePattern, (i + 1), (currentEntryInfo.SymbolNumber + 1), currentLine[currentEntryInfo.SymbolNumber]));
+                        AddCouldNotFindAnyLexemeError(i, currentLine, currentEntryInfo);
+
                         currentEntryInfo.CurrentState = 0;
                         ++currentEntryInfo.SymbolNumber;
 
@@ -123,12 +129,14 @@ namespace Interpreter
                     {
                         currentEntryInfo.LexemeBuffer += currentLine[currentEntryInfo.SymbolNumber];
                         currentEntryInfo.CurrentState = _translationTable[currentKey, currentEntryInfo.CurrentState];
+
                         ++currentEntryInfo.SymbolNumber;
 
                         continue;
                     }
 
                     SetTokenValue(currentEntryInfo, _outputTable.Buffer);
+
                     _outputTable.InsertTranslationResult();
                     _outputTable.Buffer.Clear();
                     currentEntryInfo.Clear();
@@ -139,115 +147,124 @@ namespace Interpreter
             return _outputTable;
         }
 
+        private void SetCurrentState(CurrentEntryInfo currentEntryInfo, int currentKey)
+        {
+            currentEntryInfo.CurrentState = _translationTable[currentKey, currentEntryInfo.CurrentState];
+        }
+
+        private void AddStateLogMessage(string currentLine, CurrentEntryInfo currentEntryInfo)
+        {
+            StateLog.Add(string.Format(
+                                    _stateLogMessagePattern,
+                                    currentLine[currentEntryInfo.SymbolNumber],
+                                    currentEntryInfo.CurrentState));
+        }
+
+        private void AddUnknownSybolStateError(
+            int lineNumber, 
+            string currentLine, 
+            CurrentEntryInfo currentEntryInfo)
+        {
+            _errors.Add(string.Format(
+                _unknownSymbolErrorPattern, 
+                lineNumber,
+                currentEntryInfo.SymbolNumber,
+                currentLine[currentEntryInfo.SymbolNumber]));
+        }
+
+        private void AddCouldNotFindAnyLexemeError(
+            int lineNumber,
+            string currentLine,
+            CurrentEntryInfo currentEntryInfo)
+        {
+            _errors.Add(string.Format(
+                _couldNotFindAnyLexemePattern,
+                (lineNumber + 1),
+                (currentEntryInfo.SymbolNumber + 1),
+                currentLine[currentEntryInfo.SymbolNumber]));
+        }
+
         private void SetTokenValue(CurrentEntryInfo info, LexicalToken lexicalToken)
         {
             switch (info.CurrentState)
             {
                 case 101:
                     lexicalToken.Token = TranslationToken.BooleanDataType;
-                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 102:
                     lexicalToken.Token = TranslationToken.BreakKeyword;
-                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 103:
                     lexicalToken.Token = TranslationToken.Constant;
-                    lexicalToken.TokenAttributeValue = "CONSTANT";
                     break;
                 case 104:
                     lexicalToken.Token = TranslationToken.Constant;
-                    lexicalToken.TokenAttributeValue = "CONSTANT";
                     break;
                 case 105:
                     lexicalToken.Token = TranslationToken.WhileKeyword;
-                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 106:
                     lexicalToken.Token = TranslationToken.InputKeyword;
-                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 107:
                     lexicalToken.Token = TranslationToken.IfKeyword;
-                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 108:
                     lexicalToken.Token = TranslationToken.EchoKeyword;
-                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 109:
                     lexicalToken.Token = TranslationToken.ElseKeyword;
-                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 110:
                     lexicalToken.Token = TranslationToken.LeftBrace;
-                    lexicalToken.TokenAttributeValue = "LPAR_S";
                     break;
                 case 111:                    
                     lexicalToken.Token = TranslationToken.RightBrace;
-                    lexicalToken.TokenAttributeValue = "RPAR_S";
                     break;
                 case 112:
                     lexicalToken.Token = TranslationToken.Constant;
-                    lexicalToken.TokenAttributeValue = "CONSTANT";
                     break;
                 case 113:
                     lexicalToken.Token = TranslationToken.Space;
-                    lexicalToken.TokenAttributeValue = "SPACE";
                     break;
                 case 114:
                     lexicalToken.Token = TranslationToken.Identifier;
-                    lexicalToken.TokenAttributeValue = "IDENTIFIER";
                     break;
                 case 115:
                     lexicalToken.Token = TranslationToken.PlusOperation;
-                    lexicalToken.TokenAttributeValue = "OPERATION";
                     break;
                 case 116:                    
                     lexicalToken.Token = TranslationToken.MinusOperation;
-                    lexicalToken.TokenAttributeValue = "OPERATION";
                     break;
                 case 117:
                     lexicalToken.Token = TranslationToken.AssignOperation;
-                    lexicalToken.TokenAttributeValue = "ASSIGN";
                     break;
-                case 118:
-                    
-                    
+                case 118:               
                     lexicalToken.Token = TranslationToken.ComparsionOpearation;
-                    lexicalToken.TokenAttributeValue = "COMPARSION";
                     break;
                 case 119:
                     lexicalToken.Token = TranslationToken.DivisionOperation;
-                    lexicalToken.TokenAttributeValue = "OPERATION";
                     break;
                 case 120:
                     lexicalToken.Token = TranslationToken.MultipleOperation;
-                    lexicalToken.TokenAttributeValue = "OPERATION";
                     break;
                 case 121:
                     lexicalToken.Token = TranslationToken.RemainderOfTheDivisionOperation;
-                    lexicalToken.TokenAttributeValue = "OPERATION";
                     break;
                 case 122:
                     lexicalToken.Token = TranslationToken.Comma;
-                    lexicalToken.TokenAttributeValue = "COMMA";
                     break;
                 case 123:
                     lexicalToken.Token = TranslationToken.Semicolon;
-                    lexicalToken.TokenAttributeValue = "SEMICOLON";
                     break;
                 case 124:                    
                     lexicalToken.Token = TranslationToken.LeftParentheses;
-                    lexicalToken.TokenAttributeValue = "LPAR_R";
                     break;
                 case 125:                    
                     lexicalToken.Token = TranslationToken.RightParentheses;
-                    lexicalToken.TokenAttributeValue = "RPAR_R";
                     break;
                 case 126:
                     lexicalToken.Token = TranslationToken.Digit;
-                    lexicalToken.TokenAttributeValue = "DIGIT";
                     break;
             }
 

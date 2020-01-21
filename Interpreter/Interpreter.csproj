@@ -87,6 +87,8 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="TranslationResult\Variables\IntVariable.cs" />
+    <Compile Include="TranslationResult\Variables\BoolVariable.cs" />
     <Compile Include="Translation\id_Table.cs" />
     <Compile Include="Info.cs">
       <SubType>Form</SubType>

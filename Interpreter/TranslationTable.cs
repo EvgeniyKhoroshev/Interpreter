@@ -17,7 +17,7 @@ namespace Interpreter
         public LexicalToken Buffer; // Буфер ввода/вывода таблицы
         public void InsertTranslationResult()
         {
-            if (Buffer.isIdentifier)
+            if (true/*Buffer.isIdentifier*/)
                 Identifiers.addRecord(Buffer);
             else if (Buffer.Token == TranslationToken.Identifier)
                 Identifiers.isIdentifierExists(Buffer);
