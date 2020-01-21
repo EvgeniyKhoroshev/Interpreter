@@ -64,7 +64,7 @@ namespace Interpreter
                     regroupedTable.Buffer.Clear();
                     continue;
                 }
-                if (!flag && regroupedTable.Buffer.Value != " ")                // Отсутствие флага пропуска говорит о том,
+                if (!flag && regroupedTable.Buffer.TokenAttributeValue != " ")                // Отсутствие флага пропуска говорит о том,
                                                                                 //что текущий обьект можно поместить в результат,
                                                                                 //если поле "Token" не равно " "
                     regroupedTable.InsertTranslationResult();
@@ -238,9 +238,9 @@ namespace Interpreter
         {
             Buffer.Clear();
             Buffer.Token = TranslationToken.GotoLabel;
-            Buffer.Value = "Label " + Convert.ToString(mark) + ":";
-            Buffer.AttributeValue = "LABEL";
-            Buffer.CurrentColumnIndex = 0;
+            Buffer.TokenAttributeValue = "Label " + Convert.ToString(mark) + ":";
+            Buffer.TokenAttributeValue = "LABEL";
+            Buffer.ColumnIndex = 0;
             Buffer.StringNumber = mark;
         }
 
@@ -248,11 +248,11 @@ namespace Interpreter
         {
             Buffer.Clear();
             Buffer.Token = TranslationToken.GotoTransition;
-            Buffer.Value = "goto " + Convert.ToString(mark);
-            Buffer.AttributeValue = "GOTO";
-            Buffer.CurrentColumnIndex = 0;
+            Buffer.TokenAttributeValue = "goto " + Convert.ToString(mark);
+            Buffer.TokenAttributeValue = "GOTO";
+            Buffer.ColumnIndex = 0;
             Buffer.StringNumber = mark;
-            Buffer.isConditionalBranch = conditional;
+            //Buffer.isConditionalBranch = conditional;
         }
 
         private void postfixString()                                                    // Трансляция выражений

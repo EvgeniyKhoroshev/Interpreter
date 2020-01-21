@@ -1,7 +1,7 @@
 ﻿using Interpreter.TranslationResult;
 using System.Collections.Generic;
 
-namespace Interpreter
+namespace Interpreter.Translation
 {
     public class id_Table
     {
@@ -38,12 +38,12 @@ namespace Interpreter
         {
 
             string nameForBuf;
-            if (input.isIdentifier)
+            if (true /*input.isIdentifier*/)
             {
-                nameForBuf = input.Value;
+                nameForBuf = input.TokenAttributeValue;
                 if (!intTable.ContainsKey(nameForBuf) && !boolTable.ContainsKey(nameForBuf))
                 {
-                    if (input.AttributeValue == "BOOL")
+                    if (input.TokenAttributeValue == "BOOL")
                     {
                         bool_buff.numberInProgram = input.LexemeStartIndex;
                         bool_buff.name = nameForBuf;
@@ -52,7 +52,7 @@ namespace Interpreter
                         clearBuff();
                         return true;
                     }
-                    if (input.AttributeValue == "INT")
+                    if (input.TokenAttributeValue == "INT")
                     {
                         int_buff.numberInProgram = input.LexemeStartIndex;
                         int_buff.name = nameForBuf;
@@ -64,7 +64,7 @@ namespace Interpreter
                 }
                 else
                 {
-                    errors.Enqueue("Строка [" + (input.StringNumber + 1).ToString() + "][" + input.LexemeStartIndex + "] '" + input.Value + "' Идентификатор с таким именем уже существует.\n");
+                    errors.Enqueue("Строка [" + (input.StringNumber + 1).ToString() + "][" + input.LexemeStartIndex + "] '" + input.TokenAttributeValue + "' Идентификатор с таким именем уже существует.\n");
                     return false;
                 }
             }
@@ -72,10 +72,10 @@ namespace Interpreter
         }
         public bool isIdentifierExists(LexicalToken input)
         {
-            string nameForBuf = input.Value;
+            string nameForBuf = input.TokenAttributeValue;
             if (!intTable.ContainsKey(nameForBuf) && !boolTable.ContainsKey(nameForBuf))
             {
-                errors.Enqueue("[" + (input.StringNumber + 1).ToString() + "][" + input.LexemeStartIndex + "] '" + input.Value + "' Переменная не была обьявлена в программе.\n");
+                errors.Enqueue("[" + (input.StringNumber + 1).ToString() + "][" + input.LexemeStartIndex + "] '" + input.TokenAttributeValue + "' Переменная не была обьявлена в программе.\n");
                 return false;
             }
             return true;

@@ -63,7 +63,7 @@ namespace Interpreter
             int score = 0;
             int index = 0;
             index = FindEcho();
-            if (currentTask.basicEcho.AttributeValue == "")
+            if (currentTask.basicEcho.TokenAttributeValue == "")
                 score += 10;
             else
             if (index == -1)
@@ -73,12 +73,12 @@ namespace Interpreter
             else
             {
                 input.takeOp(input.ThreeAddressCode[index].FirstOperand);
-                if (input.currentInt.value == Convert.ToInt32(currentTask.basicEcho.Value))
+                if (input.currentInt.value == Convert.ToInt32(currentTask.basicEcho.TokenAttributeValue))
                 {
                     result += "Выведен верный ответ.\n";
                     score += 10;
                 }
-                if (input.currentInt.name == currentTask.basicEcho.AttributeValue)
+                if (input.currentInt.name == currentTask.basicEcho.TokenAttributeValue)
                 {
                     result += "Выведена верная переменная.\n";
                     score += 10;
@@ -102,19 +102,19 @@ namespace Interpreter
             }
 
             index = FindInput();
-            if (currentTask.basicInput.AttributeValue == "")
+            if (currentTask.basicInput.TokenAttributeValue == "")
             {
                 score += 10;
             }
             else
             if (index == -1)
             {
-                result += "В условии задано ввести переменную " + currentTask.basicInput.AttributeValue + " с клавиатуры.\n";
+                result += "В условии задано ввести переменную " + currentTask.basicInput.TokenAttributeValue + " с клавиатуры.\n";
             }
             else
             {
                 input.takeOp(input.ThreeAddressCode[index].FirstOperand);
-                if (input.currentInt.name == currentTask.basicInput.AttributeValue)
+                if (input.currentInt.name == currentTask.basicInput.TokenAttributeValue)
                 {
                     score += 10;
                 }
@@ -126,19 +126,19 @@ namespace Interpreter
             if (input.source.Identifiers.isIdentifierExists(currentTask.basicID))
             {
                 score += 20;
-                if (input.source.Identifiers.intTable.ContainsKey(currentTask.basicID.Value))
+                if (input.source.Identifiers.intTable.ContainsKey(currentTask.basicID.TokenAttributeValue))
                 {
                     score += 15;
-                    if (currentTask.basicID.AttributeValue == "")
+                    if (currentTask.basicID.TokenAttributeValue == "")
                         score += 15;
                     else
-                    if (input.source.Identifiers.intTable[currentTask.basicID.Value].value == Convert.ToInt32(currentTask.basicID.AttributeValue))
+                    if (input.source.Identifiers.intTable[currentTask.basicID.TokenAttributeValue].value == Convert.ToInt32(currentTask.basicID.TokenAttributeValue))
                         score += 15;
                 }
             }
             else
             {
-                result += "Заданная условием переменная " + currentTask.basicID.Value + " не найдена в программе.\n";
+                result += "Заданная условием переменная " + currentTask.basicID.TokenAttributeValue + " не найдена в программе.\n";
             }
             result += "Программа выполнена на " + score.ToString() + "% в соответствии с условием.";
             if (currentScore < score)
@@ -148,13 +148,13 @@ namespace Interpreter
         public void InitializeBasic()
         {
             ClearTask();
-            currentTask.basicEcho.Value = "50";
-            currentTask.basicEcho.AttributeValue = "A";
+            currentTask.basicEcho.TokenAttributeValue = "50";
+            currentTask.basicEcho.TokenAttributeValue = "A";
             currentTask.triadCount = 2;
-            currentTask.basicID.Value = "A";
+            currentTask.basicID.TokenAttributeValue = "A";
             currentTask.basicID.Token = TranslationToken.Identifier;
-            currentTask.basicID.AttributeValue = "50";
-            currentTask.basicInput.AttributeValue = "";
+            currentTask.basicID.TokenAttributeValue = "50";
+            currentTask.basicInput.TokenAttributeValue = "";
             tasks.Enqueue(currentTask);
             currentProblem.problemImage = true;
             currentProblem.problemIndex = 1;
@@ -163,13 +163,13 @@ namespace Interpreter
             problemsToOut.Enqueue(currentProblem);
 
             ClearTask();
-            currentTask.basicEcho.Value = "1";
-            currentTask.basicEcho.AttributeValue = "B";
+            currentTask.basicEcho.TokenAttributeValue = "1";
+            currentTask.basicEcho.TokenAttributeValue = "B";
             currentTask.triadCount = 5;
-            currentTask.basicID.Value = "A";
+            currentTask.basicID.TokenAttributeValue = "A";
             currentTask.basicID.Token = TranslationToken.Identifier;
 
-            currentTask.basicInput.AttributeValue = "A";
+            currentTask.basicInput.TokenAttributeValue = "A";
             tasks.Enqueue(currentTask);
             currentProblem.problemImage = true;
             currentProblem.problemIndex = 2;
@@ -178,13 +178,13 @@ namespace Interpreter
             problemsToOut.Enqueue(currentProblem);
             ClearTask();
 
-            currentTask.basicEcho.Value = "120";
-            currentTask.basicEcho.AttributeValue = "RESULT";
+            currentTask.basicEcho.TokenAttributeValue = "120";
+            currentTask.basicEcho.TokenAttributeValue = "RESULT";
             currentTask.triadCount = 18;
-            currentTask.basicID.Value = "COUNTER";
+            currentTask.basicID.TokenAttributeValue = "COUNTER";
             currentTask.basicID.Token = TranslationToken.Identifier;
 
-            currentTask.basicInput.AttributeValue = "FACT";
+            currentTask.basicInput.TokenAttributeValue = "FACT";
             tasks.Enqueue(currentTask);
             currentProblem.problemImage = true;
             currentProblem.problemIndex = 3;

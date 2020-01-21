@@ -87,7 +87,7 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
-    <Compile Include="id_Table.cs" />
+    <Compile Include="Translation\id_Table.cs" />
     <Compile Include="Info.cs">
       <SubType>Form</SubType>
     </Compile>

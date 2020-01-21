@@ -1,27 +1,27 @@
 ﻿namespace Interpreter.TranslationResult
 {
     /// <summary>
-    /// Перечисление типов данных.
+    /// Enumeration of data types.
     /// </summary>
     public enum DataType
     {
         /// <summary>
-        /// Значение не определено.
+        /// Undefined.
         /// </summary>
         Undefined = 0,
 
         /// <summary>
-        /// Целочисленный.
+        /// Integer.
         /// </summary>
         Int = 1,
 
         /// <summary>
-        /// Логический.
+        /// Boolean.
         /// </summary>
         Bool = 2,
 
         /// <summary>
-        /// Строковый.
+        /// String value.
         /// </summary>
         String = 3,
     }

@@ -1,12 +1,12 @@
 ﻿namespace Interpreter.Translation
 {
     /// <summary>
-    /// Перечисление возможных лексических токенов.
+    /// Enumeration of lexical tokens.
     /// </summary>
     public enum TranslationToken
     {
         /// <summary>
-        /// _.
+        /// \t, ' '.
         /// </summary>
         Space = 0,
 

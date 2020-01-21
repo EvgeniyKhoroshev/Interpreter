@@ -77,17 +77,6 @@ namespace Interpreter
             return -1;
         }
 
-        private int GetColByID(char Col)
-        {
-            if (!_LLColumn.Contains(Col))
-                return -1;
-
-            for (int i = 0; i < _LLRow.Length; ++i)
-                if (Col == _LLColumn[i]) return i;
-
-            return -1;
-        }
-
         private void PutInStack(int caseOf)
         {
             switch (caseOf)
@@ -297,7 +286,7 @@ namespace Interpreter
                     Log += "Синтаксический разбор успешно завершен.\n";
                     return;
                 case 0:
-                    errLog.Enqueue("Строка [" + (buffer.StringNumber + 1).ToString() + "]. Неожиданный символ " + buffer.Value + ". \n");
+                    errLog.Enqueue("Строка [" + (buffer.StringNumber + 1).ToString() + "]. Неожиданный символ " + buffer.TokenAttributeValue + ". \n");
                     PrintLog(0);
                     if (input.Count > 0)
                         buffer = input.Dequeue();

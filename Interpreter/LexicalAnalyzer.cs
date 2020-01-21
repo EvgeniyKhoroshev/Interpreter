@@ -145,115 +145,115 @@ namespace Interpreter
             {
                 case 101:
                     lexicalToken.Token = TranslationToken.BooleanDataType;
-                    lexicalToken.AttributeValue = "KEYWORD";
+                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 102:
                     lexicalToken.Token = TranslationToken.BreakKeyword;
-                    lexicalToken.AttributeValue = "KEYWORD";
+                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 103:
                     lexicalToken.Token = TranslationToken.Constant;
-                    lexicalToken.AttributeValue = "CONSTANT";
+                    lexicalToken.TokenAttributeValue = "CONSTANT";
                     break;
                 case 104:
                     lexicalToken.Token = TranslationToken.Constant;
-                    lexicalToken.AttributeValue = "CONSTANT";
+                    lexicalToken.TokenAttributeValue = "CONSTANT";
                     break;
                 case 105:
                     lexicalToken.Token = TranslationToken.WhileKeyword;
-                    lexicalToken.AttributeValue = "KEYWORD";
+                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 106:
                     lexicalToken.Token = TranslationToken.InputKeyword;
-                    lexicalToken.AttributeValue = "KEYWORD";
+                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 107:
                     lexicalToken.Token = TranslationToken.IfKeyword;
-                    lexicalToken.AttributeValue = "KEYWORD";
+                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 108:
                     lexicalToken.Token = TranslationToken.EchoKeyword;
-                    lexicalToken.AttributeValue = "KEYWORD";
+                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 109:
                     lexicalToken.Token = TranslationToken.ElseKeyword;
-                    lexicalToken.AttributeValue = "KEYWORD";
+                    lexicalToken.TokenAttributeValue = "KEYWORD";
                     break;
                 case 110:
                     lexicalToken.Token = TranslationToken.LeftBrace;
-                    lexicalToken.AttributeValue = "LPAR_S";
+                    lexicalToken.TokenAttributeValue = "LPAR_S";
                     break;
                 case 111:                    
                     lexicalToken.Token = TranslationToken.RightBrace;
-                    lexicalToken.AttributeValue = "RPAR_S";
+                    lexicalToken.TokenAttributeValue = "RPAR_S";
                     break;
                 case 112:
                     lexicalToken.Token = TranslationToken.Constant;
-                    lexicalToken.AttributeValue = "CONSTANT";
+                    lexicalToken.TokenAttributeValue = "CONSTANT";
                     break;
                 case 113:
                     lexicalToken.Token = TranslationToken.Space;
-                    lexicalToken.AttributeValue = "SPACE";
+                    lexicalToken.TokenAttributeValue = "SPACE";
                     break;
                 case 114:
                     lexicalToken.Token = TranslationToken.Identifier;
-                    lexicalToken.AttributeValue = "IDENTIFIER";
+                    lexicalToken.TokenAttributeValue = "IDENTIFIER";
                     break;
                 case 115:
                     lexicalToken.Token = TranslationToken.PlusOperation;
-                    lexicalToken.AttributeValue = "OPERATION";
+                    lexicalToken.TokenAttributeValue = "OPERATION";
                     break;
                 case 116:                    
                     lexicalToken.Token = TranslationToken.MinusOperation;
-                    lexicalToken.AttributeValue = "OPERATION";
+                    lexicalToken.TokenAttributeValue = "OPERATION";
                     break;
                 case 117:
                     lexicalToken.Token = TranslationToken.AssignOperation;
-                    lexicalToken.AttributeValue = "ASSIGN";
+                    lexicalToken.TokenAttributeValue = "ASSIGN";
                     break;
                 case 118:
                     
                     
                     lexicalToken.Token = TranslationToken.ComparsionOpearation;
-                    lexicalToken.AttributeValue = "COMPARSION";
+                    lexicalToken.TokenAttributeValue = "COMPARSION";
                     break;
                 case 119:
                     lexicalToken.Token = TranslationToken.DivisionOperation;
-                    lexicalToken.AttributeValue = "OPERATION";
+                    lexicalToken.TokenAttributeValue = "OPERATION";
                     break;
                 case 120:
                     lexicalToken.Token = TranslationToken.MultipleOperation;
-                    lexicalToken.AttributeValue = "OPERATION";
+                    lexicalToken.TokenAttributeValue = "OPERATION";
                     break;
                 case 121:
                     lexicalToken.Token = TranslationToken.RemainderOfTheDivisionOperation;
-                    lexicalToken.AttributeValue = "OPERATION";
+                    lexicalToken.TokenAttributeValue = "OPERATION";
                     break;
                 case 122:
                     lexicalToken.Token = TranslationToken.Comma;
-                    lexicalToken.AttributeValue = "COMMA";
+                    lexicalToken.TokenAttributeValue = "COMMA";
                     break;
                 case 123:
                     lexicalToken.Token = TranslationToken.Semicolon;
-                    lexicalToken.AttributeValue = "SEMICOLON";
+                    lexicalToken.TokenAttributeValue = "SEMICOLON";
                     break;
                 case 124:                    
                     lexicalToken.Token = TranslationToken.LeftParentheses;
-                    lexicalToken.AttributeValue = "LPAR_R";
+                    lexicalToken.TokenAttributeValue = "LPAR_R";
                     break;
                 case 125:                    
                     lexicalToken.Token = TranslationToken.RightParentheses;
-                    lexicalToken.AttributeValue = "RPAR_R";
+                    lexicalToken.TokenAttributeValue = "RPAR_R";
                     break;
                 case 126:
                     lexicalToken.Token = TranslationToken.Digit;
-                    lexicalToken.AttributeValue = "DIGIT";
+                    lexicalToken.TokenAttributeValue = "DIGIT";
                     break;
             }
 
-            lexicalToken.Value = info.LexemeBuffer;
+            lexicalToken.TokenAttributeValue = info.LexemeBuffer;
             lexicalToken.StringNumber = info.StringNumber;
-            lexicalToken.CurrentColumnIndex = info.SymbolNumber;
+            lexicalToken.ColumnIndex = info.SymbolNumber;
         }
     }
 

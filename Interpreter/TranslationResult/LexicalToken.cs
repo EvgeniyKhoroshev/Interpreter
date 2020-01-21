@@ -3,53 +3,52 @@
 namespace Interpreter.TranslationResult
 {
     /// <summary>
-    /// Класс токена, который получился в результате разбора лексемы.
+    /// Result of the lexical translation of program code.
     /// </summary>
     public class LexicalToken
     {
         /// <summary>
-        /// Индекс начала лексемы.
+        /// Lexeme start index.
         /// </summary>
-        public int LexemeStartIndex { get => CurrentColumnIndex - Value.Length; }
+        public int LexemeStartIndex { get => ColumnIndex - TokenAttributeValue.Length; }
 
         /// <summary>
-        /// Значение лексемы.
+        /// Token attribute value.
         /// </summary>
-        public string Value;
+        public string TokenAttributeValue;
 
         /// <summary>
-        /// Токен.
+        /// Token.
         /// </summary>
         public TranslationToken Token;
 
-
-        public string AttributeValue;
-
         /// <summary>
-        /// Номер строки.
+        /// String number.
         /// </summary>
         public int StringNumber;
 
         /// <summary>
-        /// Текущий номер столбца.
+        /// Current olumn index.
         /// </summary>
-        public int CurrentColumnIndex;
-
-        public bool isIdentifier;
-        public bool isConditionalBranch;
+        public int ColumnIndex;
     }
 
+    /// <summary>
+    /// Class to extend <see cref="LexicalToken"/> functionality.
+    /// </summary>
     public static class LexicalTokenExtensions
     {
+        /// <summary>
+        /// Clearing out lexical token values.
+        /// </summary>
+        /// <param name="source">Lexical token.</param>
         public static void Clear(this LexicalToken source)
         {
-            source.CurrentColumnIndex = 0;
-            source.Token = TranslationToken.Space;
-            source.Value = "";
-            source.StringNumber = 0;
-            source.AttributeValue = "";
-            source.isIdentifier = false;
-            source.isConditionalBranch = false;
+            source.ColumnIndex = default;
+            source.Token = default;
+            source.TokenAttributeValue = default;
+            source.StringNumber = default;
+            source.TokenAttributeValue = default;
         }
     }
 }

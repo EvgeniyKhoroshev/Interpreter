@@ -30,9 +30,9 @@ namespace Interpreter
         private void createTriad()
         {
             Buffer.Clear();
-            Buffer.Value = Convert.ToString(triadCounter);
+            Buffer.TokenAttributeValue = Convert.ToString(triadCounter);
             Buffer.Token = TranslationToken.Triada;
-            Buffer.CurrentColumnIndex = triadCounter;
+            Buffer.ColumnIndex = triadCounter;
         }
         private void ActionCase()
         {
@@ -74,7 +74,7 @@ namespace Interpreter
                 case TranslationToken.GotoLabel:
                 case TranslationToken.GotoTransition:
                     BufferTriada.Operation = Buffer;
-                    if (Buffer.isConditionalBranch)
+//                    if (Buffer.isConditionalBranch)
                         BufferTriada.FirstOperand = workStack.Pop();
                     Buffer.Clear();
                     BufferTriada.TriadNumber = triadCounter;

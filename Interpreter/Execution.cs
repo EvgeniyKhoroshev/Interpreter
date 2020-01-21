@@ -40,7 +40,7 @@ namespace Interpreter
             triadResult = new string[ThreeAddressCode.Count()];
             while (pointer < this.ThreeAddressCode.Count() && !outFlag)
             {
-                if (ThreeAddressCode[pointer].Operation.AttributeValue == "OPERATION" || ThreeAddressCode[pointer].Operation.AttributeValue == "COMPARSION")
+                if (ThreeAddressCode[pointer].Operation.TokenAttributeValue == "OPERATION" || ThreeAddressCode[pointer].Operation.TokenAttributeValue == "COMPARSION")
                     ProcessOperation();
                 actionCase();
             }
@@ -80,7 +80,7 @@ namespace Interpreter
                         outFlag = true;
                         return;
                     }
-                    currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
+                    currentInt.name = ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue;
                     currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                     currentInt.value = Convert.ToInt32(Ibuf.textBox1.Text);
                     source.Identifiers.intTable[currentInt.name] = currentInt;
@@ -91,7 +91,7 @@ namespace Interpreter
                         if (triadResult[pointer - 1] == "FALSE")
                             if (findLabel(ThreeAddressCode[pointer].Operation.StringNumber) != -1)
                             {
-                                triadResult[pointer] = ThreeAddressCode[pointer].Operation.Value;
+                                triadResult[pointer] = ThreeAddressCode[pointer].Operation.TokenAttributeValue;
                                 pointer = findLabel(ThreeAddressCode[pointer].Operation.StringNumber);
                                 break;
                             }
@@ -110,7 +110,7 @@ namespace Interpreter
                     {
                         if (findLabel(ThreeAddressCode[pointer].Operation.LexemeStartIndex) != -1)
                         {
-                            triadResult[pointer] = ThreeAddressCode[pointer].Operation.Value;
+                            triadResult[pointer] = ThreeAddressCode[pointer].Operation.TokenAttributeValue;
                             pointer = findLabel(ThreeAddressCode[pointer].Operation.StringNumber);
                             break;
                         }
@@ -210,7 +210,7 @@ namespace Interpreter
         private void ProcessComparsion(LexicalToken input, bool isInt)
         {
             if (!isInt)
-                switch (input.Value)
+                switch (input.TokenAttributeValue)
                 {
                     case "==":
                         triadResult[pointer] = (currentBool.value == bufBool.value).ToString();
@@ -225,7 +225,7 @@ namespace Interpreter
                         break;
                 }
             else
-                switch (input.Value)
+                switch (input.TokenAttributeValue)
                 {
                     case "==":
                         triadResult[pointer] = (bufInt.value == currentInt.value).ToString();
@@ -263,7 +263,7 @@ namespace Interpreter
             {
                 outFlag = true;
                 error = "Строка [" + (ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() + "]. Несовместимость типов данных : '"
-                    + ThreeAddressCode[pointer].FirstOperand.Value + "' и '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
+                    + ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue + "' и '" + ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue + "'";
                 return;
             }
             operationCase(s);
@@ -286,13 +286,13 @@ namespace Interpreter
                 case TranslationToken.Identifier:
                     if (checkID(input))
                     {
-                        if (source.Identifiers.intTable.ContainsKey(input.Value))
+                        if (source.Identifiers.intTable.ContainsKey(input.TokenAttributeValue))
                         {
                             GetCurrentIntByID(input);
                             return true;
                         }
                         else
-                            if (source.Identifiers.boolTable.ContainsKey(input.Value))
+                            if (source.Identifiers.boolTable.ContainsKey(input.TokenAttributeValue))
                         {
                             GetCurrentBoolByID(input);
                             return false;
@@ -333,33 +333,33 @@ namespace Interpreter
 
         private bool GetCurrentConst(LexicalToken input)
         {
-            if (CompareBool(input.Value, true))
+            if (CompareBool(input.TokenAttributeValue, true))
             {
                 currentBool.value = true;
                 currentBool.numberInProgram = input.LexemeStartIndex;
                 return false;
             }
-            if (CompareBool(input.Value, false))
+            if (CompareBool(input.TokenAttributeValue, false))
             {
                 currentBool.value = false;
                 currentBool.numberInProgram = input.LexemeStartIndex;
                 return false;
             }
-            currentInt.value = Convert.ToInt32(input.Value);
+            currentInt.value = Convert.ToInt32(input.TokenAttributeValue);
             currentBool.numberInProgram = input.LexemeStartIndex;
             return true;
         }
 
         private void GetCurrentIntByID(LexicalToken input)
         {
-            currentInt.name = input.Value;
+            currentInt.name = input.TokenAttributeValue;
             currentInt.value = source.Identifiers.intTable[currentInt.name].value;
             currentInt.numberInProgram = input.LexemeStartIndex;
         }
 
         private void GetCurrentBoolByID(LexicalToken input)
         {
-            currentBool.name = input.Value;
+            currentBool.name = input.TokenAttributeValue;
             currentBool.value = source.Identifiers.boolTable[currentBool.name].value;
             currentBool.numberInProgram = input.LexemeStartIndex;
         }
@@ -377,35 +377,35 @@ namespace Interpreter
         {
             if (checkID(ThreeAddressCode[pointer].FirstOperand))
             {
-                if (source.Identifiers.intTable.ContainsKey(ThreeAddressCode[pointer].FirstOperand.Value))
+                if (source.Identifiers.intTable.ContainsKey(ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue))
                 {
                     switch (ThreeAddressCode[pointer].SecondOperand.Token)
                     {
                         case TranslationToken.Constant: // Константа.
-                            if (ThreeAddressCode[pointer].SecondOperand.Value == "TRUE" || ThreeAddressCode[pointer].SecondOperand.Value == "FALSE")
+                            if (ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue == "TRUE" || ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue == "FALSE")
                             {
                                 outFlag = true;
                                 error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1) +
-                                    "] невозможно присвоить переменной типа 'INT' значение переменной '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
+                                    "] невозможно присвоить переменной типа 'INT' значение переменной '" + ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue + "'";
                                 return;
                             }
-                            currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
-                            currentInt.value = Convert.ToInt32(ThreeAddressCode[pointer].SecondOperand.Value);
+                            currentInt.name = ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue;
+                            currentInt.value = Convert.ToInt32(ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue);
                             currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                             source.Identifiers.intTable[currentInt.name] = currentInt;
                             ClearBuff();
                             break;
 
                         case TranslationToken.Identifier: // Переменная.
-                            if (source.Identifiers.boolTable.ContainsKey(ThreeAddressCode[pointer].SecondOperand.Value))
+                            if (source.Identifiers.boolTable.ContainsKey(ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue))
                             {
                                 outFlag = true;
                                 error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1) +
-                                        "] невозможно присвоить переменной типа 'INT' значение переменной '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
+                                        "] невозможно присвоить переменной типа 'INT' значение переменной '" + ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue + "'";
                                 return;
                             }
-                            currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
-                            currentInt.value = source.Identifiers.intTable[ThreeAddressCode[pointer].SecondOperand.Value].value;
+                            currentInt.name = ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue;
+                            currentInt.value = source.Identifiers.intTable[ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue].value;
                             currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                             source.Identifiers.intTable[currentInt.name] = currentInt;
                             ClearBuff();
@@ -415,7 +415,7 @@ namespace Interpreter
                                 triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex] != "TRUE" &&
                                 triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex] != "FALSE")
                             {
-                                currentInt.name = ThreeAddressCode[pointer].FirstOperand.Value;
+                                currentInt.name = ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue;
                                 currentInt.value = Convert.ToInt32(triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex]);
                                 currentInt.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                                 source.Identifiers.intTable[currentInt.name] = currentInt;
@@ -425,41 +425,41 @@ namespace Interpreter
                             {
                                 outFlag = true;
                                 error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() +
-                                    "] невозможно присвоить переменной типа 'INT' значение '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
+                                    "] невозможно присвоить переменной типа 'INT' значение '" + ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue + "'";
                                 return;
                             }
                             break;
                     }
                     return;
                 }
-                if (source.Identifiers.boolTable.ContainsKey(ThreeAddressCode[pointer].FirstOperand.Value))
+                if (source.Identifiers.boolTable.ContainsKey(ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue))
                 {
                     switch (ThreeAddressCode[pointer].SecondOperand.Token)
                     {
                         case TranslationToken.Constant:
-                            if (ThreeAddressCode[pointer].SecondOperand.Value != "TRUE" && ThreeAddressCode[pointer].SecondOperand.Value != "FALSE")
+                            if (ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue != "TRUE" && ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue != "FALSE")
                             {
                                 outFlag = true;
                                 error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() +
-                                    "] невозможно присвоить переменной типа 'BOOL' значение '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
+                                    "] невозможно присвоить переменной типа 'BOOL' значение '" + ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue + "'";
                                 return;
                             }
-                            currentBool.name = ThreeAddressCode[pointer].FirstOperand.Value;
-                            currentBool.value = Convert.ToBoolean(ThreeAddressCode[pointer].SecondOperand.Value);
+                            currentBool.name = ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue;
+                            currentBool.value = Convert.ToBoolean(ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue);
                             currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                             source.Identifiers.boolTable[currentBool.name] = currentBool;
                             ClearBuff();
                             break;
                         case TranslationToken.Identifier:
-                            if (source.Identifiers.intTable.ContainsKey(ThreeAddressCode[pointer].SecondOperand.Value))
+                            if (source.Identifiers.intTable.ContainsKey(ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue))
                             {
                                 outFlag = true;
                                 error = "Строка [" + Convert.ToString(ThreeAddressCode[pointer].FirstOperand.StringNumber + 1).ToString() +
-                                        "] невозможно присвоить переменной типа 'INT' значение '" + ThreeAddressCode[pointer].SecondOperand.Value + "'";
+                                        "] невозможно присвоить переменной типа 'INT' значение '" + ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue + "'";
                                 return;
                             }
-                            currentBool.name = ThreeAddressCode[pointer].FirstOperand.Value;
-                            currentBool.value = source.Identifiers.boolTable[ThreeAddressCode[pointer].SecondOperand.Value].value;
+                            currentBool.name = ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue;
+                            currentBool.value = source.Identifiers.boolTable[ThreeAddressCode[pointer].SecondOperand.TokenAttributeValue].value;
                             currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                             source.Identifiers.boolTable[currentBool.name] = currentBool;
                             ClearBuff();
@@ -468,7 +468,7 @@ namespace Interpreter
                             if (triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex] == "TRUE" ||
                                 triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex] == "FALSE")
                             {
-                                currentBool.name = ThreeAddressCode[pointer].FirstOperand.Value;
+                                currentBool.name = ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue;
                                 currentBool.value = Convert.ToBoolean(triadResult[ThreeAddressCode[pointer].SecondOperand.LexemeStartIndex]);
                                 currentBool.numberInProgram = ThreeAddressCode[pointer].FirstOperand.LexemeStartIndex;
                                 source.Identifiers.boolTable[currentBool.name] = currentBool;
@@ -487,7 +487,7 @@ namespace Interpreter
             }
             else
             {
-                error = "Идентификатор " + ThreeAddressCode[pointer].FirstOperand.Value + " не обьявлен. Невозможно присвоить значение.";
+                error = "Идентификатор " + ThreeAddressCode[pointer].FirstOperand.TokenAttributeValue + " не обьявлен. Невозможно присвоить значение.";
                 outFlag = true;
                 return;
             }

@@ -109,10 +109,10 @@ namespace Interpreter
             {
                 if (x.Token == TranslationToken.LeftBrace || x.Token == TranslationToken.Semicolon)
                 {
-                    richTextBox5.AppendText(x.Value + "  " + "\n  ");
+                    richTextBox5.AppendText(x.TokenAttributeValue + "  " + "\n  ");
                     continue;
                 }
-                richTextBox5.AppendText(x.Value + "  ");
+                richTextBox5.AppendText(x.TokenAttributeValue + "  ");
             }
 
             richTextBox5.AppendText("\n-------------------\n\n");
@@ -135,7 +135,7 @@ namespace Interpreter
             foreach (var x in execution.ThreeAddressCode)
             {
                 richTextBox5.AppendText(Convert.ToString(x.TriadNumber) + "   "
-                    + x.FirstOperand.Value + "  " + x.Operation.Value + "  " + x.SecondOperand.Value + "\n");
+                    + x.FirstOperand.TokenAttributeValue + "  " + x.Operation.TokenAttributeValue + "  " + x.SecondOperand.TokenAttributeValue + "\n");
             }
             richTextBox5.AppendText("\n-------------------\n\n");
             foreach (var x in execution.source.Identifiers.intTable)
